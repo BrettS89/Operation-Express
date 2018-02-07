@@ -3,6 +3,7 @@ var router = express.Router();
 var bcrypt = require('bcryptjs');
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
+var request = require('superagent');
 
 
 //SIGN UP
@@ -26,6 +27,7 @@ router.post('/', function (req, res, next) {
         });
     });
 });
+
 
 //SIGN IN
 router.post('/signin', function(req, res, next){
@@ -59,5 +61,32 @@ router.post('/signin', function(req, res, next){
     });
 });
 
+
+//Crazy ass Mailchimp integration
+router.post('/mailchimp', function(req, res, next){
+    var mailchimpInstance   = 'us17',
+        listUniqueId        = 'b11b1bd3e7',
+        mailchimpApiKey     = '42ced9eab56da17702989d3ee7248749-us17';
+
+    request
+        .post('https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listUniqueId + '/members/')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Basic ' + new Buffer('any:' + mailchimpApiKey ).toString('base64'))
+        .send({
+          'email_address': req.body.email,
+          'status': 'subscribed',
+          'merge_fields': {
+            'FNAME': req.body.firstName,
+            'LNAME': req.body.lastName
+          }
+        })
+            .end(function(err, response) {
+              if (response.status < 300 || (response.status === 400 && response.body.title === "Member Exists")) {
+                res.send('Signed Up!');
+              } else {
+                res.send('Sign Up Failed :(');
+              }
+          });    
+});
 
 module.exports = router;

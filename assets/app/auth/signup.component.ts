@@ -26,6 +26,17 @@ export class SignupComponent implements OnInit{
                 data => console.log(data),
                 error => console.error(error)
             );
+        console.log(this.myForm.value.email);
+        this.authService.mailChimp({firstName: this.myForm.value.firstName,
+                                    lastName: this.myForm.value.lastName,
+                                    email: this.myForm.value.email,
+                                    status: 'subscribed'
+                                })
+        .subscribe(
+            (data) => console.log(data),
+            (error) => console.log(error),
+            );
+
         this.myForm.reset();
     }
 

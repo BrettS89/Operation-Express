@@ -1,0 +1,10 @@
+<h1 class="page-header">Log in</h1>
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" >
+	<div class="form-group">
+		<input formControlName="email" type="email" id="email" class="form-control rounded" placeholder="Email">
+	</div>
+	<div class="form-group">
+		<input formControlName="password" type="password" id="password" class="form-control rounded" placeholder="password">
+	</div>
+	<button class="btn btn-primary rounded" type="submit">Log in</button>
+</form>

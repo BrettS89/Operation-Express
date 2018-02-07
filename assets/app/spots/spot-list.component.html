@@ -1,0 +1,12 @@
+<div class="col">
+	<div class="card" style="width: 22.5rem;" (click)="onSelect2()" >
+		<img class="card-img-top" src="{{spot.image}}" alt="Card image cap">
+	  		<div class="card-block">
+	    		<p class="card-title type">{{type}}</p>
+	  			<p class="card-title title">{{spot.name}}</p>
+	    		<p class="card-text city">{{spot.city}}, {{spot.state}}</p>
+	    		<span  [className]="'fa'" [innerHtml]="rating"></span>
+	    	</div>		
+  	</div>
+</div>
+

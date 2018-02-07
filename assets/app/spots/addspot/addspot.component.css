@@ -1,0 +1,17 @@
+label{
+	font-weight: 600;
+}
+
+h1{
+	margin: 30px 0;
+}
+
+form{
+	width: 70%;
+	margin-bottom: 40px;
+}
+
+.rounded{
+	border-radius: 4px;
+}
+

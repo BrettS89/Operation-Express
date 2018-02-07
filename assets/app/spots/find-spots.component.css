@@ -1,0 +1,46 @@
+.row3{
+	margin-bottom: 30px;
+}
+
+footer{
+
+	height: 40px;
+}
+
+.foot{
+	padding top: 30px;
+}
+
+span{
+	font-weight: 700;
+	font-size: 20px;
+	padding-top: 20px;
+}
+
+.fa{
+	margin-left: 8px;
+	font-size: 22px;
+	color: #593196;
+}
+
+form{
+	/*width: 400px;*/
+	margin: 20px auto;
+}
+
+input{
+	width: 365px;
+	height: 37.5px;
+	display: inline;
+}
+button{
+	display: inline;
+	margin-bottom: 4px;
+	margin-left: 2px;
+	/*width: 30px;*/
+}
+
+.fa{
+	color: #EAE5F1;
+	margin: 0 0;
+}

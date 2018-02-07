@@ -1,0 +1,19 @@
+<form (ngSubmit)="onSubmit(f)" #f="ngForm" >
+	<div class="form-group">
+		<input ngModel type="text" name="city" id="city" class="form-control rounded" placeholder="Search a New Jersey city or township">	
+		<button class="btn btn-primary rounded" type="submit"><i class="fa fa-search" aria-hidden="true"></i>
+</button>
+	</div>
+</form>
+
+
+<h3>Results</h3>
+<div class="container-fluid">
+	<div class="row row2 row3">
+		<div class="mx-auto"  
+			*ngFor="let spot of spots">
+			<app-spot-list [spot]="spot"></app-spot-list>
+		</div>
+
+	</div>		
+</div>	

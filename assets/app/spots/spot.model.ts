@@ -5,6 +5,7 @@ export class Spot {
 		public type: string, 
 		public address: string,
 		public city: string,
+		public searchCity: string,
 		public state: string,
 		public rating: string,
 		public image: string,

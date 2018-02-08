@@ -44,6 +44,7 @@ export class SpotService {
 					spot.type,
 					spot.address,
 					spot.city,
+					spot.searchCity,
 					spot.state,
 					spot.rating,
 					spot.image,
@@ -83,6 +84,7 @@ export class SpotService {
 					type: spot.type,
 					address: spot.address,
 					city: spot.city,
+					searchCity: spot.searchedCity,
 					state: spot.state,
 					rating: spot.rating,
 					image: spot.image,
@@ -124,6 +126,7 @@ export class SpotService {
 					spot.type,
 					spot.address,
 					spot.city,
+					spot.searchCity,
 					spot.state,
 					spot.rating,
 					spot.image,
@@ -161,6 +164,7 @@ export class SpotService {
 	}	
 
 
+//Get lattitude and longitude of address from Google API 
 	getCords(location: {address: string, city: string, state: string}){
 		return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + location.address + location.city + location.state'&key=AIzaSyBEo1uy5x6d9koa5HlpElidXxADlWXxLl8')
 		.map((response: Response ) => {

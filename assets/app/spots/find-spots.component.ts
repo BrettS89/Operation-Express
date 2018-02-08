@@ -17,7 +17,7 @@ export class FindSpotsComponent implements OnInit{
 	constructor(private spotService: SpotService, private router: Router){}
 
 	onSubmit(form: NgForm){
-		this.city = form.value.city;				
+		this.city = form.value.city.toLowerCase().split(' ').join('');				
 		form.resetForm();
 		this.router.navigate(['/', 'search', this.city]);
 	}

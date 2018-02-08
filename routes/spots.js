@@ -52,7 +52,7 @@ router.post('/one', function(req, res, next){
 //Get Spot by City
 router.post('/search', function(req, res, next){
     var theCity = req.body.city;
-    Spot.find({city: req.body.city}, function(err, foundCity){
+    Spot.find({searchCity: req.body.city}, function(err, foundCity){
       if(err){
             return res.status(500).json({
                 title: 'An error occured' ,
@@ -138,6 +138,7 @@ router.post('/auth/post', function(req, res, next) {
       type: req.body.type, 
       address: req.body.address,
       city: req.body.city,
+      searchCity: req.body.searchCity,
       state: req.body.state,
       rating: req.body.rating,
       image: req.body.image,

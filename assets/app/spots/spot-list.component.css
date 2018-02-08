@@ -3,8 +3,9 @@
 	margin-bottom: 30px;
 }
 
-.card:hover{
+.click:hover{
 	cursor: pointer;
+	text-decoration: underline;
 }
 
 div{

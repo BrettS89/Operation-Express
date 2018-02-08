@@ -20,6 +20,7 @@ export class AddspotComponent{
 			form.value.type,
 			form.value.address,
 			form.value.city,
+			form.value.city.toLowerCase().split(' ').join(''),
 			form.value.state,
 			form.value.rating,
 			form.value.image,

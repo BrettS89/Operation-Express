@@ -17,7 +17,7 @@ export class SpotSearchComponent implements OnInit{
 	citySearch;
 
 	onSubmit(form: NgForm){
-		this.citySearch = form.value.city;				
+		this.citySearch = form.value.city.toLowerCase().split(' ').join('');				
 		form.resetForm();
 		this.router.navigate(['/', 'search', this.citySearch]);
 		window.location.reload();

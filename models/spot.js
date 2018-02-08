@@ -8,6 +8,7 @@ var schema = new Schema({
     type: {type: String, required: true},
     address: {type: String, required: true},
     city: {type: String, required: true},
+    searchCity: {type: String, required: true},
     state: {type: String, required: true},
     rating: {type: String, required: true},
     image: {type: String, required: true},

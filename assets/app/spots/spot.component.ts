@@ -15,9 +15,6 @@ export class SpotComponent implements OnInit{
 	spots: Spot[];
 	id: {_id: string};
 
-// 	ngAfterViewChecked() {
-// 	window.scrollTo(0, 0);
-// }
 
 	ngOnInit(){
 		this.id = {

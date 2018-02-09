@@ -6,8 +6,9 @@ import { User } from './user.model';
 
 @Injectable()
 export class AuthService{
-	
-	
+
+
+//Sign up function		
 	signUp(user: User){
 		const body = JSON.stringify(user);
 		const headers = new Headers({'Content-Type': 'application/json'})
@@ -17,6 +18,8 @@ export class AuthService{
 			.catch((error: Response) => Observable.throw(error.json()));
 	}
 
+
+//Sign in function
 	signIn(user: User){
 		const body = JSON.stringify(user);
 		const headers = new Headers({'Content-Type': 'application/json'})
@@ -25,15 +28,37 @@ export class AuthService{
 			.catch((error: Response) => Observable.throw(error.json()));
 	}
 
+
+//Log out funciton
 	logOut(){
 		localStorage.clear();
 	}
 
+
+//Logic for checking if user is logged in
 	isLoggedIn(){
 		return localStorage.getItem('token') !== null;
 	}
 
 
+//Get user by Id
+	getUser(id: string){
+		return this.http.get('http://localhost:3000/user/getuser/' + id)
+		.map(
+			(response: Response) => {
+				const data = response.json().theUser;
+				const newData = {
+					firstName: data.firstName,
+					lastName: data.lastName,
+					spots: data.spots,
+				};
+				return newData;
+			}
+			);
+	}
+
+
+//Send new user data to back end to send to Mailchimp list
 	mailChimp(subscriber: {firstName: string, lastName: string, email: string, status: string}){
 		const body = JSON.stringify(subscriber);
 		const headers = new Headers({'Content-Type': 'application/json'});

@@ -21,6 +21,7 @@ import { SpotComponent } from './spots/spot.component';
 import { SpotSearchComponent } from './spots/spot-search.component';
 import { GoogleMapComponent } from './spots/googleMaps/googlemap.component';
 import { CommentComponent } from './comments/comment.component';
+import { UserProfileComponent } from './user/user-profile.component';
 import { SpotService } from './spots/spot.service';
 import { AuthService } from './auth/auth.service';
 
@@ -40,7 +41,8 @@ import { AuthService } from './auth/auth.service';
     SpotComponent,
     SpotSearchComponent,
     GoogleMapComponent,
-    CommentComponent],
+    CommentComponent,
+    UserProfileComponent],
     imports: [BrowserModule, routing, HttpModule, FormsModule, ReactiveFormsModule, AgmCoreModule.forRoot({
       apiKey: 'AIzaSyC1ogXtwbPYhPXi7XPeKoOlxhq4P_b2El4'
     })],

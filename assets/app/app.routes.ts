@@ -7,6 +7,7 @@ import { FindSpotsComponent } from './spots/find-spots.component';
 import { ShowSpot2Component } from './spots/2show-spot.component';
 import { SpotComponent } from './spots/spot.component';
 import { SpotSearchComponent } from './spots/spot-search.component';
+import { UserProfileComponent } from './user/user-profile.component';
 
 
 const APP_ROUTES: Routes = [
@@ -17,7 +18,8 @@ const APP_ROUTES: Routes = [
 	{path: 'addspot', component: AddspotComponent},
 	{path: 'spot/:_id', component: SpotComponent},
 	{path: 'search/:city', component: SpotSearchComponent},
-	{path: 'findspots', component: FindSpotsComponent} 
+	{path: 'findspots', component: FindSpotsComponent},
+	{path: 'user/:id', component: UserProfileComponent} 
 
 ];
 

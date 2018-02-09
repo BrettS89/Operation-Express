@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 var request = require('superagent');
 
 
-//SIGN UP
+//Sign up
 router.post('/', function (req, res, next) {
     var user = new User({
         firstName: req.body.firstName,
@@ -29,7 +29,7 @@ router.post('/', function (req, res, next) {
 });
 
 
-//SIGN IN
+//Sign in
 router.post('/signin', function(req, res, next){
     User.findOne({email: req.body.email}, function(err, user){
         if(err){
@@ -58,6 +58,29 @@ router.post('/signin', function(req, res, next){
                 firstName: user.firstName,
                 lastName: user.lastName
             });
+    });
+});
+
+
+//Get user by ID
+router.get('/getuser/:id', function(req, res, next){
+    User.findById(req.params.id, function(err, user){
+        if(err){
+            return res.status(500).json({
+                title: 'An error occured',
+                error: err
+            });
+        }
+        if(!user){
+            return res.status(500).json({
+                title: 'Query failed',
+                error: 'Could not find user'
+            });
+        }
+        res.status(200).json({
+            title: 'User found!',
+            theUser: user
+        });
     });
 });
 

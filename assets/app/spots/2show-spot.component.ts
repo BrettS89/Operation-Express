@@ -65,12 +65,16 @@ export class ShowSpot2Component implements OnInit{
 			this.id = {
 			_id: this.spt._id};
 
+
+//Format city for searching
 			this.address = this.spt.address.split(' ').join('+');
 			this.city = this.spt.city.split(' ').join('+');
 			this.state = this.spt.state;
 
 			this.location = {address: this.address, city: this.city, state: this.state};
 
+
+//Get lattitude and longitude from Google GeoCode API
 			this.spotService.getCords(this.location)
 			.subscribe(
 				(cord) => {
@@ -80,6 +84,9 @@ export class ShowSpot2Component implements OnInit{
 					console.log(cord);
 				}
 				);
+
+
+//Get all comments			
 			this.spotService.getComments(this.spt._id)
 			.subscribe(
 				(comments: Comment[]) => {
@@ -90,18 +97,10 @@ export class ShowSpot2Component implements OnInit{
 				);
 
 		}
-		belongsToUser(){
-		return localStorage.getItem('userId') == this.spt.user;
-	}
+//**End of OnInit**
 
-		onDelete(){
-			this.spotService.deleteSpot(this.id)
-			.subscribe(
-				result => console.log(result)
-				);
-			this.router.navigate(['/']);
-		}
 
+//Submit a comment
 		onSubmit(form: NgForm){
 			const comment = new Comment(
 					form.value.content,
@@ -115,6 +114,22 @@ export class ShowSpot2Component implements OnInit{
 				result => console.log(result)
 				);
 			this.comments.unshift(comment);
+		}
+
+
+//Logic to check if spot belongs to user		
+		belongsToUser(){
+		return localStorage.getItem('userId') == this.spt.user;
+			}
+
+
+//Delete a spot
+		onDelete(){
+			this.spotService.deleteSpot(this.id)
+			.subscribe(
+				result => console.log(result)
+				);
+			this.router.navigate(['/']);
 		}
 
 	}

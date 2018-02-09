@@ -28,7 +28,13 @@ li{
 #damnLink:hover{
 	color: #EAE5F1;
 }
-
+.dropdown{
+	margin-right: 55px;
+}
+.dlink:hover{
+	cursor: pointer;
+	color: white !important;
+}
 
 /*.navbar{
 	position: fixed;

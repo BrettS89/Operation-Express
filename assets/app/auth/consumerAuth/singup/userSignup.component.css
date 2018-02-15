@@ -1,0 +1,14 @@
+h1{
+	text-align: center;
+	margin: 40px auto;
+}
+
+.sform{
+	width: 30%;
+	text-align: center;
+	margin: 0 auto;
+}
+
+input{
+	border-radius: 17px;
+}

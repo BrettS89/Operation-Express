@@ -1,0 +1,22 @@
+.order{
+	text-align: center;
+}
+
+h1{
+	margin: 40px 0;
+}
+
+p{
+	font-family: 'Mukta Mahee', sans-serif;
+	font-size: 24px;
+	margin-bottom: 10px; 
+}
+
+hr{
+	width: 250px;
+	margin: 20px auto;
+}
+
+button{
+	margin-top: 20px;
+}

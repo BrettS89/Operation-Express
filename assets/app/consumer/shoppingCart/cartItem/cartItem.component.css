@@ -1,0 +1,26 @@
+.itemCard{
+	display: flex;
+	flex-direction: column;
+	width: 14rem;
+	margin-bottom: 20px;
+}
+
+.content{
+	display: flex;
+	flex-direction: row;
+}
+
+.info{
+	display: flex;
+	flex-direction: column;
+}
+
+p{
+	font-family: 'Mukta Mahee', sans-serif;
+	margin-bottom: 0px; 
+}
+
+img{
+	width: 100px;
+	height: 100px;
+}

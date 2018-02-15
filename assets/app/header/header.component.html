@@ -1,47 +1,29 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a id="brand" class="navbar-brand" [routerLink]="['/']"><i class="fa fa-code" aria-hidden="true"></i> CodeOut</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="height: 80px">
+  <a class="navbar-brand" [routerLink]="['/']" style="font-size: 24px; font-weight: 700; line-height: auto; padding-bottom: 10px">Empire</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation" style="">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarColor01">
-    <!-- <div id="findandadd"> -->  
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/findspots']">Find spots<span class="sr-only"></span></a>
-        </li>
-        <li class="nav-item" class="addaspot" *ngIf="isLoggedIn()">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/addspot']"  
-          >Add a spot</a>
-        </li>
-        <li class="nav-item" class="addaspot"  *ngIf="!isLoggedIn()">
-          <a class="nav-link" id="damnLink" [routerLink]="['/login']">Add a spot</a>
-        </li>
-    <!-- </div> -->
-
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/login']"
-          >Log in</a>
-        </li>
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/signup']">Sign up</a>
-        </li>
-    <!--     <li class="nav-item" *ngIf="isLoggedIn()">
-          <a class="nav-link click" (click)="onClick()">Log out</a>
-        </li> -->
-        <li class="nav-item dropdown" *ngIf="isLoggedIn()">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{firstName}}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
-            <a class="dropdown-item dlink" (click)="goToProfile()" >Profile</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item dlink" (click)="onClick()">Log out</a>
-          </div>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/stores/find']" style="font-weight: 700; font-size: 17px; line-height: auto;">Find stores</a>
       </li>
-      </ul>
-
-    <!-- <form class="form-inline my-2 my-lg-0">
+    </ul>
+    <ul class="navbar-nav ml-auto">  
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/user/signup']" style="font-weight: 700; font-size: 17px; line-height: auto;">Sign up</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/user/login']" style="font-weight: 700; font-size: 17px; line-height: auto;">Login</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto" style="margin: 0 !important">  
+      <li class="nav-item shopping">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/cart']" style="font-weight: 700; font-size: 17px; line-height: auto;"><i class="fas fa-shopping-basket fa-2x"></i></a>
+      </li>
+    </ul>
+<!--     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
     </form> -->

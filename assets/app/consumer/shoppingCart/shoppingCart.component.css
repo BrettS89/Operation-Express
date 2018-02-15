@@ -1,0 +1,22 @@
+.orderDetails{
+	margin-bottom: 50px;
+}
+
+button{
+	margin-top: 20px;
+}
+
+h1{
+	margin: 30px 0;
+}
+
+p{
+	font-family: 'Mukta Mahee', sans-serif;
+	font-size: 20px;
+	margin-bottom: 0px; 
+}
+
+hr{
+	width: 150px;
+	margin: 5px 0;
+}

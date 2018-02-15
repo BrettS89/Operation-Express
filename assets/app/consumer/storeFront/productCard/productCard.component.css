@@ -1,0 +1,75 @@
+[class*="col-"]{
+	margin: 0 10px;
+}
+
+.card{
+	margin-bottom: 30px;
+}
+
+.card-block{
+	padding: 7px 15px;
+	display: flex;
+	flex-direction: row;
+	background-color: #f5f5f5;
+}
+.productInfo{
+	display: flex;
+	flex-direction: column;
+}
+
+.cart{
+	display: flex;
+	margin: auto;
+}
+
+.fa-shopping-basket{
+	color: #4582EC;
+}
+
+.click:hover{
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+div{
+	padding: 0px;
+}
+
+.type{
+	margin-top: 5px;
+	margin-bottom: 0px;
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.title{
+	font-weight: 700;
+	font-size: 16px;
+	margin-bottom: 0px;
+}
+
+p{
+	font-family: 'Mukta Mahee', sans-serif;
+}
+
+img{
+	border-radius: 1%;
+}
+
+.city{
+	margin-bottom: 0px;
+}
+
+.nopad{
+	display: inline;
+}
+
+@media(max-width: 991px){
+	.ayo{
+		margin: 15px auto;
+	}
+	[class*="col-"]{
+	margin: 0;
+}
+
+}

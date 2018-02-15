@@ -1,15 +1,13 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var Spot = require('./spot');
+const mongoose = require('mongoose');
+const Order = require('./order');
 
-var schema = new Schema({
-	firstName: {type: String, required: true},
-	lastName: {type: String, required: true},
-	password: {type: String, required: true},
-	email: {type: String, required: true, unique: true},
-	spots: [{type: Schema.Types.ObjectId, ref: 'Spot'}]
+const userSchema = new mongoose.Schema({
+	firstName: String,
+	lastName: String,
+	email: String,
+	password: String,
+	orders: [{type: Schema.Types.ObjectId, ref: 'Order'}],
+	createdDate: {type: Date, default: Date.now}
 });
 
-
-
-module.exports = mongoose.model('User', schema);
+module.exports = mongoose.model('User', userSchema);

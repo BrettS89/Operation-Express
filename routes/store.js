@@ -1,0 +1,415 @@
+const express = require('express');
+const router = express.Router();
+const Store = require('../models/store');
+const Product = require('../models/product');
+const User = require('../models/user');
+const Cart = require('../models/cart');
+const Order = require('../models/order');
+const StoreAdmin = require('../models/storeadmin');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+
+//Get stores
+router.get('/get', function(req, res, next){
+	Store.find({}, function(err, stores){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!stores){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find any stores'
+			});
+		}
+		res.status(200).json({
+			title: 'Stores retrieved',
+			stores: stores
+		});
+	});
+});
+
+
+//Get store by Id
+router.get('/one/:id', function(req, res, next){
+	Store.findById(req.params.id) 
+	.populate('products', ['name', 'brand', 'price', 'quantity', 'image', '_id', 'store'])
+	.exec(function(err, store){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!store){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find store'
+			});
+		}
+		console.log(store);
+		res.status(200).json({
+			title: 'Store found',
+			store: store
+		});
+	});
+});
+
+
+//Create a new store
+router.post('/new', function(req, res, next){
+	const newStore = new Store({
+		name: req.body.name,
+		type: req.body.type,
+		address: req.body.address,
+		city: req.body.city,
+		state: req.body.state,
+		image: req.body.image
+	});
+	newStore.save(function(err, newStore){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		const storeAdmin = new StoreAdmin({
+			store: newStore._id,
+			email: (newStore.name + "." + newStore.city + "@express.com").toLowerCase().split(' ').join(''),
+			password: bcrypt.hashSync((newStore.name + "." + newStore.city + "@password").toLowerCase().split(' ').join(''), 10)
+		});
+		storeAdmin.save(function(err, admin){
+			if(err){
+				return res.status(500).json({
+					title: 'An error occured',
+					error: err
+				});
+			}
+			newStore.update({admin: admin._id}, function(err, store){
+				if(err){
+					return res.status(500).json({
+						title: 'An error occured',
+						error: err
+					});
+				}
+				res.status(201).json({
+				title: 'Store created',
+				obj: store
+			});
+			});
+		});
+		
+	});
+});
+
+
+//Add new product
+router.post('/product/new', function(req, res, next){
+	Store.findById(req.body.store, function(err, store){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!store){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find store'
+			});
+		}
+		const product = new Product({
+			store: req.body.store,
+			name: req.body.name,
+			brand: req.body.brand,
+			price: req.body.price,
+			quantity: req.body.quantity,
+			image: req.body.image
+		});
+		product.save(function(err, savedProduct){
+			if(err){
+				return res.status(500).json({
+					title: 'An error occured',
+					error: err
+				});
+			}
+			store.products.push(savedProduct._id);
+			store.save();
+			res.status(201).json({
+				title: 'Product saved!',
+				product: savedProduct
+			});
+		});
+	});
+});
+
+
+//Add a shopping cart or add items to exisiting shopping cart
+router.post('/addtocart', function(req, res, next){
+	Cart.findOne({user: req.body.id}, function(err, cart){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!cart){
+			const newCart = new Cart({
+				user: req.body.id,
+				store: req.body.store,
+				products: req.body.product
+			});
+			newCart.save(function(err, createdCart){
+				if(err){
+					return res.status(500).json({
+						title: 'An error occured',
+						error: 'err'
+					});
+				}
+				return res.status(201).json({
+					title: 'Shopping cart created',
+					cart: createdCart
+				});
+			});
+		}
+		else{
+			cart.products.push(req.body.product);
+			cart.save();
+			res.status(200).json({
+				title: 'Added product to cart',
+				cart: cart
+			});
+		}
+	});
+});
+
+
+//Get shopping cart by Id
+router.get('/getcart/:id', function(req, res, next){
+	Cart.findOne({user: req.params.id}, function(err, cart){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!cart){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'No cart was found'
+			});
+		}
+		Cart.findById(cart._id)
+		.populate('products', ['name', 'brand', 'price', 'quantity', 'image']) 
+	    .exec(function(err, foundCart){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!cart){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find cart'
+			});
+		}
+		res.status(200).json({
+			title: 'Cart retrieved',
+			cart: foundCart
+		});
+	});
+  });
+});
+
+
+//Place order
+router.post('/placeorder/:id', function(req, res, next){
+	Cart.findById(req.params.id, function(err, cart){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!cart){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find cart'
+			});
+		}
+		Store.findById(req.body.store, function(err, store){
+			if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!store){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find store'
+			});
+		}
+		User.findById(req.body.user, function(err, user){
+			if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+			if(!user){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find user'
+			});
+		}
+		const newOrder = new Order({
+			user: req.body.user,
+			store: req.body.store,
+			products: req.body.products,
+			subTotal: req.body.subTotal,
+			tax: req.body.tax,
+			total: req.body.total
+		});
+		newOrder.save(function(err, order){
+			if(err){
+				return res.status(500).json({
+					title: 'An error occured',
+					error: err
+				});
+			}
+			store.orders.push(order);
+			store.save();
+			user.orders.push(order);
+			user.save();
+			cart.remove();
+			res.status(201).json({
+				title: 'Order placed',
+				order: order
+			});
+		});
+		});
+		});
+	});
+});
+
+
+//Get order by Id
+router.get('/getorder/:id', function(req, res, next){
+	Order.findById(req.params.id, function(err, order){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!order){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find order'
+			});
+		}
+		res.status(200).json({
+			title: 'Order found',
+			order: order
+		});
+	});
+});	
+
+
+//Get store for dashboard
+router.get('/adminone/:id', function(req, res, next){
+	Store.findById(req.params.id) 
+	.populate({path: 'orders', populate: [{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}]})
+	.exec(function(err, store){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!store){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'Could not find store'
+			});
+		}
+		console.log(store);
+		res.status(200).json({
+			title: 'Store found',
+			store: store
+		});
+	});
+});
+
+
+//Get orders by user id
+router.get('/userorders/:id', function(req, res, next){
+	Order.find({user: req.params.id})
+	.populate('store', ['name', 'city'])
+	.exec(function(err, orders){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!orders){
+			return res.status(500).json({
+				title: 'Query failed',
+				message: 'No orders were found'
+			});
+		}
+		res.status(200).json({
+			title: 'Orders found',
+			orders: orders
+		});
+	});
+});
+
+
+//Order has arrived
+// router.put('/arrived', function(req, res, next){
+// 	Order.findById(req.body.id, function(err, order){
+// 		if(err){
+// 			return res.status(500).json({
+// 				title: 'An error occured',
+// 				error: err
+// 			});
+// 		}
+// 		if(!order){
+// 			return res.status(500).json({
+// 				title: 'Query failed',
+// 				message: 'Could not find order'
+// 			});
+// 		}
+// 		order.update({hasArrived: 'true'});
+// 		order.save();
+// 		res.status(200).json({
+// 			title: 'Store has been notified of arrival',
+// 			order: order
+// 		});
+// 	});
+// });
+
+router.post('/arrived', function(req, res, next){
+	Order.update({_id: req.body.id}, {hasArrived: true}, function(err, updatedOrder){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		res.status(200).json({
+			title: 'Store has been notified of car arrival',
+			order: updatedOrder
+		});
+	});
+});
+
+
+module.exports = router;

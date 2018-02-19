@@ -1,10 +1,10 @@
-<div class="order">
+<div class="order" *ngIf="products">
 
 	<h1>Place your order</h1>
  
-	<p><strong>Sub total: </strong><span>$27.89</span></p>
-	<p><strong>Tax: </strong><span>$1.95</span></p>
+	<p><strong>Sub total: </strong><span>${{subTotal.toFixed(2)}}</span></p>
+	<p><strong>Tax: </strong><span>${{tax.toFixed(2)}}</span></p>
 	<hr>
-	<p><strong>Total: </strong><span>$29.84</span></p>
-	<button class="btn btn-success" [routerLink]="['/confirmed']">Place Order</button>
+	<p><strong>Total: </strong><span>${{total.toFixed(2)}}</span></p>
+	<button class="btn btn-success" (click)="placeOrder()">Place Order</button>
 </div>

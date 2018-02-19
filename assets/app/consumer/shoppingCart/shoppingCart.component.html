@@ -1,21 +1,15 @@
 <h1>Shopping Cart</h1>
 
-<div class="orderDetails">
-	<p><strong>Sub-total:</strong> <span>$27.89</span></p>
-	<p><strong>Tax: </strong><span>$1.95</span></p>
+<div class="orderDetails" *ngIf="products">
+	<p><strong>Sub-total:</strong> <span>${{subTotal.toFixed(2)}}</span></p>
+	<p><strong>Tax: </strong><span>${{tax.toFixed(2)}}</span></p>
 	<hr>
-	<p><strong>Total: </strong><span>$29.84</span></p>
-	<button class="btn btn-success" [routerLink]="['/order']">Proceed to checkout</button>
+	<p><strong>Total: </strong><span>${{total.toFixed(2)}}</span></p>
+	<button class="btn btn-success" (click)="proceedToCheckout()">Proceed to checkout</button>
 </div>
 
 <div class="row">
 
-<app-cartItem></app-cartItem>
-<app-cartItem></app-cartItem>
-<app-cartItem></app-cartItem>
-<app-cartItem></app-cartItem>
-<app-cartItem></app-cartItem>
-<app-cartItem></app-cartItem>
-<app-cartItem></app-cartItem>
+<app-cartItem *ngFor="let product of products" [product]="product"></app-cartItem>
 
 </div>

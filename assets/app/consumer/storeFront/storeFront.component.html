@@ -1,10 +1,33 @@
-<h1>Wegmans Princeton</h1>
+<div *ngIf="store">
+	<h1>{{store.name}} {{store.city}}</h1>
+	<button class="btn btn-primary" (click)="onClick()">Add product</button>
 
-<div class="row">
-	<app-productCard></app-productCard>
-	<app-productCard></app-productCard>
-	<app-productCard></app-productCard>
-	<app-productCard></app-productCard>
-	<app-productCard></app-productCard>
-	<app-productCard></app-productCard>
+	<div class="productForm" [ngClass]="{'hidden': toggle}">
+		<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+			<div class="form-group">
+		        <input ngModel class="form-control" type="text" name="name" placeholder="Name">
+		    </div>    
+		    <div class="form-group">
+		        <input ngModel class="form-control" type="text" name="brand" placeholder="Brand">
+		    </div>
+		    <div class="form-group">
+		        <input ngModel class="form-control" type="text" name="price" placeholder="Price">
+		    </div>
+		    <div class="form-group">
+		        <input ngModel class="form-control" type="text" name="quantity" placeholder="Quantity">
+		    </div>
+		    <div class="form-group">
+		        <input ngModel class="form-control" type="text" name="image" placeholder="Image url">
+		    </div>
+		    <div class="form-group">
+		        <button class="btn btn-success">Add</button>
+		    </div>
+		</form>
+	</div>
+
+
+	<div class="row">
+		<app-productCard *ngFor="let product of products" [product]="product"></app-productCard>
+	</div>
+
 </div>

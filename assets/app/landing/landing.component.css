@@ -1,4 +1,14 @@
 .jumbotron{
 	margin-top: 25px;
 	margin-bottom: 40px;
+	border-radius: 13px;
+}
+
+.btn-outline-primary{
+	border: 2px solid #4582EC;
+	font-weight: 600;
+}
+
+.btn-success{
+	font-weight: 600;
 }

@@ -1,0 +1,13 @@
+.orderDetails{
+	display: flex;
+	flex-direction: row;
+}
+
+.orderDetails:hover{
+	background-color: #98FB98;
+	cursor: pointer;
+}
+
+.detail{
+	margin: 0 10px;
+}

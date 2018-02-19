@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 
 const appRoutes = require('./routes/app');
 const authRoutes = require('./routes/auth');
+const storeRoutes = require('./routes/store');
 
 const app = express();
 mongoose.connect('mongodb://localhost:27017/oe');
@@ -31,7 +32,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-
+app.use('/store', storeRoutes);
 app.use('/auth', authRoutes);
 app.use('/', appRoutes);
 

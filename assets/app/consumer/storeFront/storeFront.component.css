@@ -1,3 +1,19 @@
 h1{
 	margin: 30px 0;
 }
+
+.productForm{
+	width: 300px;
+}
+
+input{
+	border-radius: 17px;
+}
+
+button{
+	margin-bottom: 30px;
+}
+
+.hidden{
+	display: none;
+}

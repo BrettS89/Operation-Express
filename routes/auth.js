@@ -1,7 +1,9 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const User = require('../models/user');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const StoreAdmin = require('../models/storeadmin');
 
 
 //New user signup
@@ -19,9 +21,11 @@ router.post('/signup', function(req, res){
 				error: err
 			});
 		}
+		var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
 		res.status(201).json({
 			title: 'User created',
-			obj: user
+			obj: user,
+			token: token
 		});
 	});
 });
@@ -29,7 +33,37 @@ router.post('/signup', function(req, res){
 
 //User login
 router.post('/login', function(req, res){
-	findOne({email: req.body.email}, function(err, user){
+	User.findOne({email: req.body.email}, function(err, user){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!user){
+			return res.status(401).json({
+				message: 'Invalid login credentials'
+			});
+		}
+		if (!bcrypt.compareSync(req.body.password, user.password)){
+                    return res.status(401).json({
+                    title: 'Login failed',
+                    error: {message: 'Invalid login credentials'}
+                }); 
+            }
+		const token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+		res.status(200).json({
+			title: 'User found',
+			obj: user,
+			token: token
+		});
+	});
+});
+
+
+//Store admin login
+router.post('/storeadminlogin', function(req, res, next){
+	StoreAdmin.findOne({email: req.body.email}, function(err, user){
 		if(err){
 			return res.status(500).json({
 				title: 'An error occured',
@@ -38,16 +72,20 @@ router.post('/login', function(req, res){
 		}
 		if(!user){
 			return res.status(500).json({
-				message: 'No user found'
+				message: 'Invalid login credentials'
 			});
 		}
+		if (!bcrypt.compareSync(req.body.password, user.password)){
+                    return res.status(401).json({
+                    title: 'Login failed',
+                    error: {message: 'Invalid login credentials'}
+                }); 
+            }
 		const token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
 		res.status(200).json({
 			title: 'User found',
-			token: token,
-			userId: user._id,
-			firstName: user.firstName,
-			lastName: user.lastName
+			obj: user,
+			token: token
 		});
 	});
 });

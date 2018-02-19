@@ -1,0 +1,27 @@
+<h1>Add a Store</h1>
+
+    <div class="sform">  
+	    <form (ngSubmit)="addStore(f)" #f="ngForm">
+	    	<div class="form-group">
+	            <input ngModel class="form-control" type="text" name="name" placeholder="Name">
+	        </div> 
+	        <div class="form-group">
+	            <input ngModel class="form-control" type="text" name="type" placeholder="Type of store">
+	        </div>
+	        <div class="form-group">
+	            <input ngModel class="form-control" type="text" name="address" placeholder="Address">
+	        </div> 
+	        <div class="form-group">
+	            <input ngModel class="form-control" type="text" name="city" placeholder="City">
+	        </div>    
+	        <div class="form-group">
+	            <input ngModel class="form-control" type="text" name="state" placeholder="State">
+	        </div>
+	        <div class="form-group">
+	            <input ngModel class="form-control" type="text" name="image" placeholder="Paste image url">
+	        </div>
+	        <div class="form-group">
+	            <button class="btn btn-primary btn-block">Create store</button>
+	        </div>
+	    </form>
+    </div>

@@ -1,9 +1,5 @@
 <h1>Find stores near you</h1>
 
 <div class="row">
-	<app-store-card></app-store-card>
-	<app-store-card></app-store-card>
-	<app-store-card></app-store-card>
-	<app-store-card></app-store-card>
-	<app-store-card></app-store-card>
+	<app-store-card *ngFor="let store of stores" [store]="store"></app-store-card>
 </div>

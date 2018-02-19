@@ -9,18 +9,31 @@ import { PlaceOrderComponent } from './consumer/placeOrder/placeOrder.component'
 import { OrderConfirmationComponent } from './consumer/placeOrder/orderConfirmation/orderConfirmation.component';
 import { UserSignupComponent } from './auth/consumerAuth/singup/userSignup.component';
 import { UserLoginComponent } from './auth/consumerAuth/login/userLogin.component';
+import { StoreAppComponent } from './store/storeApp.component';
+import { DashboardComponent } from './store/dashboard/dashboard.component';
+import { CreateStoreComponent } from './admin/createStore/createStore.component';
+import { StoreAdminLoginComponent } from './auth/storeAuth/login/storeAdminLogin.component';
+import { ConsumerOrdersComponent } from './consumer/orders/consumerOrders.component';
+import { OneConsumerOrderComponent } from './consumer/orders/oneOrder/oneConsumerOrder.component';
 
 const APP_ROUTES: Routes = [
 	{path: '', component: LandingComponent},
 	{path: 'cart', component: ShoppingCartComponent},
-	{path: 'order', component: PlaceOrderComponent},
-	{path: 'confirmed', component: OrderConfirmationComponent},
+	{path: 'myorders', component: ConsumerOrdersComponent},
+	{path: 'myorders/:id', component: OneConsumerOrderComponent},
+	{path: 'order/:id', component: PlaceOrderComponent},
+	{path: 'confirmed/:id', component: OrderConfirmationComponent},
 	{path: 'stores', component: ConsumerAppComponent, children: [
 		{path: 'find', component: FindStoresComponent},
 		{path: ':id', component: StoreFrontComponent}
 	]},
 	{path: 'user/signup', component: UserSignupComponent},
-	{path: 'user/login', component: UserLoginComponent}
+	{path: 'user/login', component: UserLoginComponent},
+	{path: 'store', component: StoreAppComponent, children: [
+		{path: 'dashboard/:id', component: DashboardComponent},
+		{path: 'login', component: StoreAdminLoginComponent}
+	]},
+	{path: 'create', component: CreateStoreComponent}
 ];
 
 export const routing = RouterModule.forRoot(APP_ROUTES);

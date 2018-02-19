@@ -1,0 +1,28 @@
+<div *ngIf="store">
+
+	<h5>{{store.name}} {{store.city}}</h5>
+
+	<h1>Orders</h1>
+
+	<div>
+		<ul class="nav nav-pills">
+		  <li class="nav-item">
+		    <a class="nav-link active" href="#">In route</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" href="#">Car is here</a>
+		  </li>
+		</ul>  
+	 </div>
+
+<h5>In Route</h5>
+	<div class="inRoute">
+		<app-orderCard *ngFor="let irOrder of inRoute"></app-orderCard>
+	</div>
+
+<h5>Arrived</h5>
+	<div class="Here">
+		<app-orderCard *ngFor="let arOrder of here"></app-orderCard>
+	</div>
+
+</div>

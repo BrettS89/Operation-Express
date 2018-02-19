@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="height: 80px">
-  <a class="navbar-brand" [routerLink]="['/']" style="font-size: 24px; font-weight: 700; line-height: auto; padding-bottom: 10px">Empire</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation" style="">
+  <a class="navbar-brand" [routerLink]="['/']" style="font-size: 24px; font-weight: 700; line-height: auto; padding-bottom: 10px">Express</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -9,13 +9,33 @@
       <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/stores/find']" style="font-weight: 700; font-size: 17px; line-height: auto;">Find stores</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/create']" style="font-weight: 700; font-size: 17px; line-height: auto;">Create store</a>
+      </li>
+      <li class="nav-item" *ngIf="isStoreAdmin()">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/create']" style="font-weight: 700; font-size: 17px; line-height: auto;">Dashboard</a>
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto">  
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/user/signup']" style="font-weight: 700; font-size: 17px; line-height: auto;">Sign up</a>
+      <li class="nav-item storeLink" >
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/store/login']" style="font-weight: 700; font-size: 17px; line-height: auto;" *ngIf="!loggedIn()">For stores</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/user/login']" style="font-weight: 700; font-size: 17px; line-height: auto;">Login</a>
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/user/signup']" style="font-weight: 700; font-size: 17px; line-height: auto;" *ngIf="!loggedIn()">Sign up</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/user/login']" style="font-weight: 700; font-size: 17px; line-height: auto;" *ngIf="!loggedIn()">Login</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" style="font-weight: 700; font-size: 17px; line-height: auto;" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="loggedIn()">
+          Name
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" (click)="myOrders()">Order history</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="logout()">Logout</a>
+        </div>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto" style="margin: 0 !important">  
@@ -23,9 +43,7 @@
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/cart']" style="font-weight: 700; font-size: 17px; line-height: auto;"><i class="fas fa-shopping-basket fa-2x"></i></a>
       </li>
     </ul>
-<!--     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
   </div>
 </nav>
+
+

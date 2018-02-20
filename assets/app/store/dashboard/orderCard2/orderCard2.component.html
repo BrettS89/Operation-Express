@@ -1,0 +1,18 @@
+<div class="card border-primary mb-3 order" style="max-width: 30rem;">
+
+<div class="left">
+  <div style="text-align: center; font-weight: 700; margin-top: 8px">Order placed at: {{order.createdDate | date: 'shortTime'}}</div>
+  <button class="btn btn-success"><i class="fas fa-check-circle"></i>
+
+ Completed</button>
+</div>	  
+  <div class="card-body">
+  	<div class="details">
+	    <h4 class="card-title">{{order.user.firstName}} {{order.user.lastName}}</h4>
+	    <p class="card-text"><strong>Value:</strong> ${{order.total}}</p>
+	    <p class="card-text"><strong>Items:</strong> {{order.products.length}}</p>
+	    <p class="card-text"><strong>Status:</strong> Arrived</p>
+    </div>
+  </div>
+
+</div>

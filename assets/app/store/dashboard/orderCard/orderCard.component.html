@@ -1,19 +1,20 @@
 <div class="card border-primary mb-3 order" style="max-width: 30rem;">
 
 <div class="left">
-  <div style="text-align: center; font-weight: 700; margin-top: 8px">Order placed at 4:37 PM</div>
-  <button class="btn btn-success">Handle order</button>
-</div>	  
+  <div style="text-align: center; font-weight: 700; margin-top: 8px">Order placed at: {{order.createdDate | date: 'shortTime'}}</div>
+  <button class="btn btn-success" disabled><i class="fas fa-check-circle"></i>
+
+ Completed</button>
+</div>    
   <div class="card-body">
-  	<div class="details">
-	    <h4 class="card-title">Brett Sodie</h4>
-	    <p class="card-text"><strong>Value:</strong> $29.84</p>
-	    <p class="card-text"><strong>Items:</strong>   7</p>
-	    <p class="card-text"><strong>Status:</strong>   In route</p>
+    <div class="details">
+      <h4 class="card-title">{{order.user.firstName}} {{order.user.lastName}}</h4>
+      <p class="card-text"><strong>Value:</strong> ${{order.total}}</p>
+      <p class="card-text"><strong>Items:</strong> {{order.products.length}}</p>
+      <p class="card-text"><strong>Status:</strong> In route</p>
     </div>
   </div>
 
 </div>
-
 
 

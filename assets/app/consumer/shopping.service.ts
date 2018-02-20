@@ -8,6 +8,7 @@ import { Order } from '../store/order.model';
 @Injectable()
 
 export class ShoppingService{
+	cartNum: number = 0;
 
 	constructor(private http: Http){}
 
@@ -64,7 +65,12 @@ export class ShoppingService{
 	addToCart(cart: {id: string, product: string, store: string}){
 		const body = JSON.stringify(cart);
 		const headers = new Headers({'Content-Type': 'application/json'});
-		return this.http.post('http://localhost:3000/store/addtocart/', body, {headers: headers})
+		this.cartNum++;
+		console.log(this.cartNum);
+		const token = localStorage.getItem('token') 
+				? '?token=' +localStorage.getItem('token')
+				: '';
+		return this.http.post('http://localhost:3000/store/auth/addtocart' + token, body, {headers: headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}	

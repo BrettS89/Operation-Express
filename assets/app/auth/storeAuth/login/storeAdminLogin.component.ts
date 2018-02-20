@@ -24,10 +24,13 @@ export class StoreAdminLoginComponent{
 
 		this.authService.login(user)
 		  .subscribe((data) => {
+		  	console.log(data);
 		  	localStorage.setItem('token', data.token);
 			localStorage.setItem('userId', data.obj._id);
-			localStorage.setItem('storeId', data.obj.store);
-		  	this.router.navigate(['/store', 'dashboard', data.obj.store]);
+			localStorage.setItem('storeId', data.obj.store._id);
+			localStorage.setItem('storeName', data.obj.store.name);
+			localStorage.setItem('storeCity', data.obj.store.city);
+		  	this.router.navigate(['/store', 'dashboard', data.obj.store._id]);
 		  }),
 		  error => console.log(error);
 	}

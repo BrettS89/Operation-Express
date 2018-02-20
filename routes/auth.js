@@ -63,7 +63,9 @@ router.post('/login', function(req, res){
 
 //Store admin login
 router.post('/storeadminlogin', function(req, res, next){
-	StoreAdmin.findOne({email: req.body.email}, function(err, user){
+	StoreAdmin.findOne({email: req.body.email})
+	.populate('store', ['_id', 'name', 'city'])
+	.exec(function(err, user){
 		if(err){
 			return res.status(500).json({
 				title: 'An error occured',

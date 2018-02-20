@@ -13,3 +13,7 @@ ul{
 .nav-link{
 	font-weight: 600;
 }
+
+.nav-item:hover{
+	cursor: pointer;
+}

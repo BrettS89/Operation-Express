@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ConsumerAuthService } from '../auth/consumerAuth/consumerAuth.service';
 import { StoreAuthService } from '../auth/storeAuth/storeAuth.service';
 import { Router } from '@angular/router';
+import { ShoppingService } from '../consumer/shopping.service';
 
 @Component({
 	selector: 'app-header',
@@ -10,10 +11,16 @@ import { Router } from '@angular/router';
 })
 
 export class HeaderComponent{
+	storeId: string = localStorage.getItem('storeId');
+	storeName: string = localStorage.getItem('storeName');
+	storeCity: string = localStorage.getItem('storeCity');
+	firstName: string = localStorage.getItem('firstName');
+	userId: string = localStorage.getItem('userId');
 
 	constructor(private consumerAuth: ConsumerAuthService,
 				private storeAuth: StoreAuthService,
-				private router: Router){}
+				private router: Router,
+				private shoppingService: ShoppingService){}
 	
 	loggedIn(){
 		return this.consumerAuth.isLoggedIn();
@@ -32,4 +39,7 @@ export class HeaderComponent{
 	myOrders(){
 		this.router.navigate(['/myorders']);
 	}	
+
+
+
 }

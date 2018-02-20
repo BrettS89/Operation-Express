@@ -2,4 +2,9 @@
 	<h1>Order: {{order._id}}</h1>
 
 	<button class="btn btn-success" (click)="hasArrived()">Car has arrived</button>
+
+	<h5>Sub total: ${{order.subTotal.toFixed(2)}}</h5>
+	<h5>Tax: ${{order.tax}}</h5>
+	
+	<h5>Total: ${{order.total}}</h5>
 </div>

@@ -147,44 +147,7 @@ router.post('/product/new', function(req, res, next){
 });
 
 
-//Add a shopping cart or add items to exisiting shopping cart
-router.post('/addtocart', function(req, res, next){
-	Cart.findOne({user: req.body.id}, function(err, cart){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!cart){
-			const newCart = new Cart({
-				user: req.body.id,
-				store: req.body.store,
-				products: req.body.product
-			});
-			newCart.save(function(err, createdCart){
-				if(err){
-					return res.status(500).json({
-						title: 'An error occured',
-						error: 'err'
-					});
-				}
-				return res.status(201).json({
-					title: 'Shopping cart created',
-					cart: createdCart
-				});
-			});
-		}
-		else{
-			cart.products.push(req.body.product);
-			cart.save();
-			res.status(200).json({
-				title: 'Added product to cart',
-				cart: cart
-			});
-		}
-	});
-});
+
 
 
 //Get shopping cart by Id
@@ -372,30 +335,7 @@ router.get('/userorders/:id', function(req, res, next){
 });
 
 
-//Order has arrived
-// router.put('/arrived', function(req, res, next){
-// 	Order.findById(req.body.id, function(err, order){
-// 		if(err){
-// 			return res.status(500).json({
-// 				title: 'An error occured',
-// 				error: err
-// 			});
-// 		}
-// 		if(!order){
-// 			return res.status(500).json({
-// 				title: 'Query failed',
-// 				message: 'Could not find order'
-// 			});
-// 		}
-// 		order.update({hasArrived: 'true'});
-// 		order.save();
-// 		res.status(200).json({
-// 			title: 'Store has been notified of arrival',
-// 			order: order
-// 		});
-// 	});
-// });
-
+//Change hasArrived field to true
 router.post('/arrived', function(req, res, next){
 	Order.update({_id: req.body.id}, {hasArrived: true}, function(err, updatedOrder){
 		if(err){
@@ -408,6 +348,64 @@ router.post('/arrived', function(req, res, next){
 			title: 'Store has been notified of car arrival',
 			order: updatedOrder
 		});
+	});
+});
+
+
+//=====================================================================
+//Protected Routes
+//=====================================================================
+
+
+router.use('/auth', function(req, res, next){
+  jwt.verify(req.query.token, 'secret', function(err, decoded){
+    if(err){
+      return res.status(401).json({
+        title: 'Not authenticated',
+        error: err
+      });
+    }
+    next();
+  });
+});
+
+
+//Add a shopping cart or add items to exisiting shopping cart
+router.post('/auth/addtocart', function(req, res, next){
+	Cart.findOne({user: req.body.id}, function(err, cart){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!cart){
+			const newCart = new Cart({
+				user: req.body.id,
+				store: req.body.store,
+				products: req.body.product
+			});
+			newCart.save(function(err, createdCart){
+				if(err){
+					return res.status(500).json({
+						title: 'An error occured',
+						error: 'err'
+					});
+				}
+				return res.status(201).json({
+					title: 'Shopping cart created',
+					cart: createdCart
+				});
+			});
+		}
+		else{
+			cart.products.push(req.body.product);
+			cart.save();
+			res.status(200).json({
+				title: 'Added product to cart',
+				cart: cart
+			});
+		}
 	});
 });
 

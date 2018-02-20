@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 export class OneConsumerOrderComponent implements OnInit{
 	id: string;
 	order: Order;
+	subTotal: number = 0;
 
 	constructor(private shoppingService: ShoppingService,
 				private route: ActivatedRoute,

@@ -7,22 +7,22 @@
 	<div>
 		<ul class="nav nav-pills">
 		  <li class="nav-item">
-		    <a class="nav-link active" href="#">In route</a>
+		    <a class="nav-link" [ngClass]="{'active': isInRoute}" (click)="displayInRoute()">In route</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" href="#">Car is here</a>
+		    <a class="nav-link" [ngClass]="{'active': isHere}" (click)="displayArrived()">Car is here</a>
 		  </li>
 		</ul>  
 	 </div>
 
-<h5>In Route</h5>
-	<div class="inRoute">
-		<app-orderCard *ngFor="let irOrder of inRoute"></app-orderCard>
+
+	<div class="inRoute" *ngIf="status == 'notHere' ">
+		<app-orderCard *ngFor="let irOrder of inRoute" [order]="irOrder"></app-orderCard>
 	</div>
 
-<h5>Arrived</h5>
-	<div class="Here">
-		<app-orderCard *ngFor="let arOrder of here"></app-orderCard>
+
+	<div class="Here" *ngIf="status == 'here' ">
+		<app-orderCard2 *ngFor="let arOrder of here" [order]="arOrder"></app-orderCard2>
 	</div>
 
 </div>

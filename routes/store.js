@@ -263,7 +263,9 @@ router.post('/placeorder/:id', function(req, res, next){
 
 //Get order by Id
 router.get('/getorder/:id', function(req, res, next){
-	Order.findById(req.params.id, function(err, order){
+	Order.findById(req.params.id)
+	.populate('products', ['_id', 'name', 'brand', 'quantity', 'price', 'image']) 
+	.exec(function(err, order){
 		if(err){
 			return res.status(500).json({
 				title: 'An error occured',

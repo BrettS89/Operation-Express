@@ -117,6 +117,8 @@ export class ShoppingService{
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}		
 
+
+//Set order as arrived
 	arrived(id: string){
 		const body = JSON.stringify({id: id});
 		const headers = new Headers({'Content-Type': 'application/json'});

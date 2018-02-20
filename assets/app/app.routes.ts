@@ -15,6 +15,8 @@ import { CreateStoreComponent } from './admin/createStore/createStore.component'
 import { StoreAdminLoginComponent } from './auth/storeAuth/login/storeAdminLogin.component';
 import { ConsumerOrdersComponent } from './consumer/orders/consumerOrders.component';
 import { OneConsumerOrderComponent } from './consumer/orders/oneOrder/oneConsumerOrder.component';
+import { SingleOrderComponent } from './store/dashboard/singleOrder/singleOrder.component';
+
 
 const APP_ROUTES: Routes = [
 	{path: '', component: LandingComponent},
@@ -31,6 +33,7 @@ const APP_ROUTES: Routes = [
 	{path: 'user/login', component: UserLoginComponent},
 	{path: 'store', component: StoreAppComponent, children: [
 		{path: 'dashboard/:id', component: DashboardComponent},
+		{path: 'dashboard/order/:id', component: SingleOrderComponent},
 		{path: 'login', component: StoreAdminLoginComponent}
 	]},
 	{path: 'create', component: CreateStoreComponent}

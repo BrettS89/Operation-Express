@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-orderCard',
@@ -9,4 +10,10 @@ import { Component, Input } from '@angular/core';
 export class OrderCardComponent{
 	@Input() order;
 	
+	constructor(private router: Router){}
+
+	singleOrder(){
+		this.router.navigate(['store', 'dashboard', 'order', this.order._id]);
+	}
+
 }

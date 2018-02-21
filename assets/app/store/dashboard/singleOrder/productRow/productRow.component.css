@@ -1,0 +1,20 @@
+.orderDetails{
+	display: flex;
+	flex-direction: row;
+	font-weight: 600;
+}
+
+/*.orderDetails:hover{
+	background-color: #98FB98;
+	cursor: pointer;
+}*/
+
+.detail{
+	margin: 0 10px;
+}
+
+img{
+	max-width: 75px;
+	max-height: 75px;
+}
+

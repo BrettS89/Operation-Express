@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { OrderCardComponent } from './dashboard/orderCard/orderCard.component';
 import { OrderCard2Component } from './dashboard/orderCard2/orderCard2.component';
 import { SingleOrderComponent } from './dashboard/singleOrder/singleOrder.component';
+import { ProductRowComponent } from './dashboard/singleOrder/productRow/productRow.component';
 
 @NgModule({
 	declarations: [
@@ -13,7 +14,8 @@ import { SingleOrderComponent } from './dashboard/singleOrder/singleOrder.compon
 		DashboardComponent,
 		OrderCardComponent,
 		OrderCard2Component,
-		SingleOrderComponent
+		SingleOrderComponent,
+		ProductRowComponent
 	],
 	imports: [
 		CommonModule, routing

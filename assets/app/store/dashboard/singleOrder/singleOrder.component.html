@@ -1,11 +1,17 @@
-<div>
-	<h1>Customer: </h1>
-	<h5>Order number: </h5>
-	<h5>Order placed at: </h5>
-	<button class="btn btn-success">Ayyy</button>
+<div *ngIf="order">
+	<h1>Customer: {{order.user.firstName}} {{order.user.lastName}}</h1>
+	<h5>Order number: {{order._id}}</h5>
+	<h5>Order placed at: {{order.createdDate | date: 'shortTime'}}</h5>
+	<button class="btn btn-success" *ngIf="order.hasArrived" (click)="completeOrder()"><i class="fas fa-check-circle"></i> Order Completed</button>
+	<button class="btn btn-success" disabled *ngIf="!order.hasArrived"><i class="fas fa-check-circle"></i> Order Completed</button>
 
-	<h5>Sub total: $</h5>
-	<h5>Tax: $</h5>
+	<h5>Sub total: ${{order.subTotal.toFixed(2)}}</h5>
+	<h5>Tax: ${{order.tax}}</h5>
 	
-	<h5>Total: $</h5>
+	<h5>Total: ${{order.total}}</h5>
+
+	<h2>Products</h2>
+	<div class="orders" *ngFor="let product of order.products">
+		<app-productRow [product]="product"></app-productRow>
+	</div>
 </div>

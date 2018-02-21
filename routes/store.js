@@ -264,7 +264,10 @@ router.post('/placeorder/:id', function(req, res, next){
 //Get order by Id
 router.get('/getorder/:id', function(req, res, next){
 	Order.findById(req.params.id)
-	.populate('products', ['_id', 'name', 'brand', 'quantity', 'price', 'image']) 
+	// .populate('products', ['_id', 'name', 'brand', 'quantity', 'price', 'image']) 
+
+	.populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', select: ['_id', 'name', 'brand', 'quantity', 'price', 'image']}])
+
 	.exec(function(err, order){
 		if(err){
 			return res.status(500).json({
@@ -349,6 +352,23 @@ router.post('/arrived', function(req, res, next){
 		res.status(200).json({
 			title: 'Store has been notified of car arrival',
 			order: updatedOrder
+		});
+	});
+});
+
+
+//Change completedPurchase to true
+router.post('/completed', function(req, res, next){
+	Order.update({_id: req.body.id}, {completedPurchase: true}, function(err, completedOrder){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		res.status(200).json({
+			title: 'Order has been completed',
+			order: completedOrder
 		});
 	});
 });

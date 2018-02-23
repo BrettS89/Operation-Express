@@ -2,6 +2,10 @@ h1{
 	margin: 30px 0;
 }
 
+h4{
+	margin-bottom: 30px;
+}
+
 .productForm{
 	width: 300px;
 }
@@ -17,3 +21,4 @@ button{
 .hidden{
 	display: none;
 }
+

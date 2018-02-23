@@ -24,3 +24,12 @@ img{
 	width: 100px;
 	height: 100px;
 }
+
+.remove{
+	color: lightgray;
+}
+
+.remove:hover{
+	color: red;
+	cursor: pointer;
+}

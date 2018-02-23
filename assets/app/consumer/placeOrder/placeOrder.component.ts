@@ -13,7 +13,7 @@ import { Order } from '../../store/order.model';
 export class PlaceOrderComponent implements OnInit{
 	store: string;
 	cartId: string;
-	products;
+	products: any;
 	subTotal: number = 0;
 	tax: number = 0;
 	total: number = 0;
@@ -29,11 +29,16 @@ export class PlaceOrderComponent implements OnInit{
 
 		this.shoppingService.getCart(localStorage.getItem('userId'))
 		  .subscribe((data) => {
-		  	this.products = data.products;
+		  	this.products = [];
+
+		  	for(let product of data.items){
+		  		this.products.push(product.product);
+		  	}
+
 		  	console.log(data);
 		  	this.store = data.store;
-		  		for(let product of data.products){
-		  			this.subTotal = +product.price + this.subTotal;
+		  		for(let product of data.items){
+		  			this.subTotal = +product.product.price + this.subTotal;
 		  		}
 		  		this.tax = Math.round(100 * (this.subTotal * .07))/100;
 		  		this.total = this.subTotal + this.tax;

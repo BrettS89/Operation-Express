@@ -21,10 +21,10 @@ export class ShoppingCartComponent implements OnInit{
 	ngOnInit(){
 		this.shoppingService.getCart(localStorage.getItem('userId'))
 		  .subscribe((data) => {
-		  		this.products = data.products;
+		  		this.products = data.items;
 		  		this.id = data._id;
-		  		for(let product of data.products){
-		  			this.subTotal = +product.price + this.subTotal;
+		  		for(let product of data.items){
+		  			this.subTotal = +product.product.price + this.subTotal;
 		  		}
 		  		this.tax = Math.round(100 * (this.subTotal * .07))/100;
 		  		this.total = this.subTotal + this.tax;
@@ -34,6 +34,13 @@ export class ShoppingCartComponent implements OnInit{
 
 	proceedToCheckout(){
 		this.router.navigate(['order', this.id]);
+	}
+
+	onItemRemoved(){
+		this.subTotal = 0;
+		this.tax = 0;
+		this.total = 0;
+		this.ngOnInit();
 	}
 
 }

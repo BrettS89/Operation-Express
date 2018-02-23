@@ -8,7 +8,7 @@ import { Order } from '../store/order.model';
 @Injectable()
 
 export class ShoppingService{
-	cartNum: number = 0;
+	headers = new Headers({'Content-Type': 'application/json'});
 
 	constructor(private http: Http){}
 
@@ -65,8 +65,6 @@ export class ShoppingService{
 	addToCart(cart: {id: string, product: string, store: string}){
 		const body = JSON.stringify(cart);
 		const headers = new Headers({'Content-Type': 'application/json'});
-		this.cartNum++;
-		console.log(this.cartNum);
 		const token = localStorage.getItem('token') 
 				? '?token=' +localStorage.getItem('token')
 				: '';
@@ -133,6 +131,16 @@ export class ShoppingService{
 		const body = JSON.stringify({id: id});
 		const headers = new Headers({'Content-Type': 'application/json'});
 		return this.http.post('http://localhost:3000/store/completed', body, {headers: headers})
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}	
+
+
+//Remove one item from shopping cart
+	removeCartItem(data: {user: string, item: string}){
+		const body = JSON.stringify(data);
+		console.log(body);
+		return this.http.post('http://localhost:3000/store/removefromcart', body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}	

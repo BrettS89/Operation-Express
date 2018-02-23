@@ -6,9 +6,18 @@ const User = require('../models/user');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
 const StoreAdmin = require('../models/storeadmin');
+const CartItem = require('../models/cartItem');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+function handleError(){
+	if(err){
+		return res.status(500).json({
+			title: 'An error occured',
+			error: err
+		});
+	}
+}
 
 //Get stores
 router.get('/get', function(req, res, next){
@@ -166,7 +175,8 @@ router.get('/getcart/:id', function(req, res, next){
 			});
 		}
 		Cart.findById(cart._id)
-		.populate('products', ['name', 'brand', 'price', 'quantity', 'image']) 
+		// .populate('products', ['name', 'brand', 'price', 'quantity', 'image']) 
+		.populate({path: 'items', populate: [{path: 'product', select: ['name', 'brand', 'price', 'quantity', 'image']}]})
 	    .exec(function(err, foundCart){
 		if(err){
 			return res.status(500).json({
@@ -374,6 +384,54 @@ router.post('/completed', function(req, res, next){
 });
 
 
+//Remove a product from shopping cart
+router.post('/removefromcart', function(req, res, next){
+	Cart.findOne({user: req.body.user}, function(err, cart){
+		if(err){
+			return res.status(500).json({
+				title: 'An error occured',
+				error: err
+			});
+		}
+		if(!cart){
+			return res.status(404).json({
+				title: 'Query failed',
+				message: 'No cart was found'
+			});
+		}
+		console.log(cart);
+		CartItem.findById(req.body.item, function(err, item){
+			if(err){
+				return res.status(500).json({
+					title: 'An error occured',
+					error: err
+				});
+			}
+			if(!item){
+			return res.status(404).json({
+				title: 'Query failed',
+				message: 'No item was found'
+			});
+		}
+		cart.items.pull(item);
+		cart.save(function(err, updatedCart){
+			if(err){
+				return res.status(500).json({
+					title: 'An error occured',
+					error: err
+				});
+			}
+			console.log(updatedCart);
+			res.status(200).json({
+				title: 'Product was removed from cart',
+				cart: updatedCart
+			});
+		});
+		});
+	});
+});
+
+
 //=====================================================================
 //Protected Routes
 //=====================================================================
@@ -393,41 +451,91 @@ router.use('/auth', function(req, res, next){
 
 
 //Add a shopping cart or add items to exisiting shopping cart
+// router.post('/auth/addtocart', function(req, res, next){
+// 	Cart.findOne({user: req.body.id}, function(err, cart){
+// 		if(err){
+// 			return res.status(500).json({
+// 				title: 'An error occured',
+// 				error: err
+// 			});
+// 		}
+// 		if(!cart){
+// 			const newCart = new Cart({
+// 				user: req.body.id,
+// 				store: req.body.store,
+// 				products: req.body.product
+// 			});
+// 			newCart.save(function(err, createdCart){
+// 				if(err){
+// 					return res.status(500).json({
+// 						title: 'An error occured',
+// 						error: 'err'
+// 					});
+// 				}
+// 				return res.status(201).json({
+// 					title: 'Shopping cart created',
+// 					cart: createdCart
+// 				});
+// 			});
+// 		}
+// 		else{
+// 			cart.products.push(req.body.product);
+// 			cart.save();
+// 			res.status(200).json({
+// 				title: 'Added product to cart',
+// 				cart: cart
+// 			});
+// 		}
+// 	});
+// });
+
+
 router.post('/auth/addtocart', function(req, res, next){
-	Cart.findOne({user: req.body.id}, function(err, cart){
-		if(err){
-			return res.status(500).json({
+	const cartItem = new CartItem({product: req.body.product});
+	cartItem.save(function(err, cartItem){
+			if(err){
+				return res.status(500).json({
+					title: 'An error occured',
+					error: err
+				});
+			}
+			Cart.findOne({user: req.body.id}, function(err, cart){
+				if(err){
+				return res.status(500).json({
 				title: 'An error occured',
 				error: err
-			});
-		}
-		if(!cart){
-			const newCart = new Cart({
-				user: req.body.id,
-				store: req.body.store,
-				products: req.body.product
-			});
-			newCart.save(function(err, createdCart){
-				if(err){
-					return res.status(500).json({
-						title: 'An error occured',
-						error: 'err'
+				});
+			}
+				if(!cart){
+					const newCart = new Cart({
+					user: req.body.id,
+					store: req.body.store,
+					items: cartItem._id
+				  });
+					newCart.save(function(err, createdCart){
+						if(err){
+							return res.status(500).json({
+							title: 'An error occured',
+							error: err
+						});
+					}
+						cartItem.update({cart: createdCart._id});
+						return res.status(201).json({
+							title: 'Cart created',
+							cart: createdCart
+						});
 					});
 				}
-				return res.status(201).json({
-					title: 'Shopping cart created',
-					cart: createdCart
+				else{
+				cart.items.push(cartItem._id);
+				cart.save();
+				cartItem.update({cart: cart._id});
+				res.status(200).json({
+					 Title: 'Item added to cart',
+					 cart: cart
 				});
-			});
-		}
-		else{
-			cart.products.push(req.body.product);
-			cart.save();
-			res.status(200).json({
-				title: 'Added product to cart',
-				cart: cart
-			});
-		}
+			}
+		});
 	});
 });
 

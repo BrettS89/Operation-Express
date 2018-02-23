@@ -15,6 +15,9 @@
       <li class="nav-item" *ngIf="isStoreAdmin()">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['store', 'dashboard', storeId]" style="font-weight: 700; font-size: 17px; line-height: auto;">Dashboard</a>
       </li>
+      <li class="nav-item" *ngIf="isStoreAdmin()">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['store', 'addproduct']" style="font-weight: 700; font-size: 17px; line-height: auto;">Add product</a>
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto">  
       <li class="nav-item storeLink" >
@@ -32,7 +35,6 @@
           {{firstName}}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Profile</a>
           <a class="dropdown-item" (click)="myOrders()">Order history</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" (click)="logout()">Logout</a>
@@ -50,8 +52,6 @@
           <a class="dropdown-item" (click)="logout()">Logout</a>
         </div>
       </li>
-
-
 
 
     </ul>

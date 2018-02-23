@@ -1,10 +1,11 @@
 <div class="itemCard">
-	<img src="{{product.image}}">
-	<h5>{{product.brand}} {{product.name}}</h5>
+	<img src="{{product.product.image}}">
+	<h5>{{product.product.brand}} {{product.product.name}}</h5>
 	<div class="content">
 		<div class="info">
-			<p>{{product.quantity}}</p>
-			<p>${{product.price}}</p>
+			<p>{{product.product.quantity}}</p>
+			<p>${{product.product.price}}</p>
+			<p class="remove" (click)="onRemove()">remove from cart</p>
 		</div>
 	</div>
 </div>

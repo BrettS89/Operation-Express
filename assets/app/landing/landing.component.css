@@ -1,7 +1,24 @@
+p{
+	font-family: 'Mukta Mahee', sans-serif;
+	font-size: 28px;
+	font-weight: 700;
+	color: #949A9F;
+}
+
+.text{
+	padding: 0 80px;
+	margin: 75px 0;
+}
+
 .jumbotron{
-	margin-top: 25px;
+	max-height: 450px;
+	margin-top: 40px;
 	margin-bottom: 40px;
 	border-radius: 13px;
+}
+
+.buttons{
+	margin-top: 25px;
 }
 
 .btn-outline-primary{
@@ -11,4 +28,18 @@
 
 .btn-success{
 	font-weight: 600;
+}
+
+.bodyBtn{
+	font-size: 20px;
+	margin-top: 30px;
+}
+
+button{
+	font-size: 20px;
+}
+
+img{
+	width: 100%;
+	border-radius: 13px;
 }

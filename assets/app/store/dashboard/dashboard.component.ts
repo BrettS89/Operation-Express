@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StoreService } from '../store.service';
 import { ShoppingService } from '../../consumer/shopping.service';
 import { Store } from '../../consumer/store.model';
@@ -35,11 +35,9 @@ export class DashboardComponent implements OnInit{
 	}
 
 	ngOnInit(){
-
 		setInterval(() =>{
 		  this.storeService.getStore(localStorage.getItem('storeId'))
 		    .subscribe((data) => {
-		    	console.log(data.orders);
 			  	this.store = data;
 			  	let ir = [];
 			  	let ar = [];
@@ -61,29 +59,6 @@ export class DashboardComponent implements OnInit{
 		  error => console.log(error);
 		}, 1000);
 
-}
-
-		// this.storeService.getStore(localStorage.getItem('storeId'))
-		//   .subscribe((data) => {
-		//   	console.log(data);
-		//   	this.store = data;
-		//   	let ir = [];
-		//   	let ar = [];
-		//   	for(let order of data.orders){
-		//   		if(order.completedPurchase === false){
-		//   			if(order.hasArrived === false){
-		//   				ir.push(order);
-		//   				this.inRoute = ir;
-		//   			} 
-		//   			if(order.hasArrived === true){
-		//   				ar.push(order);
-		//   				this.here = ar;
-		//   			}
-		//   		}
-		//   	}
-		//   }),
-		//   error => console.log(error);
-	
-
+	}
 
 }

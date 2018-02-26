@@ -30,6 +30,5 @@ export class CartItemComponent implements OnInit{
 		  	);
 		this.removed.emit('item removed');  
 
-		  // this.router.navigate(['cart']);
 	}
 }

@@ -26,7 +26,10 @@ export class StoreService{
 	addProduct(product: Product){
 		const body = JSON.stringify(product);
 		const headers = new Headers({'Content-Type': 'application/json'});
-		return this.http.post('http://localhost:3000/store/product/new', body, {headers: headers})
+		const token = localStorage.getItem('token') 
+				? '?token=' +localStorage.getItem('token')
+				: '';
+		return this.http.post('http://localhost:3000/store/auth/product/new' + token, body, {headers: headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}
@@ -34,7 +37,10 @@ export class StoreService{
 
 //Get store by Id
 	getStore(id: string){
-		return this.http.get('http://localhost:3000/store/adminone/' + id)
+		const token = localStorage.getItem('token') 
+				? '?token=' +localStorage.getItem('token')
+				: '';
+		return this.http.get('http://localhost:3000/store/auth/adminone/' + id + token)
 			.map((response: Response) => {
 				const data = response.json().store;
 				const store = new Store(
@@ -54,5 +60,4 @@ export class StoreService{
 			.catch((error: Response) => Observable.throw(error.json()));
 	}
 	
-
 }

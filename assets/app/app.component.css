@@ -1,0 +1,25 @@
+.container{
+	min-height: 100vh;
+}
+
+footer{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	background-color: #02B875;
+	color: #fff;
+	padding: 15px 0;
+}
+
+footer div{
+	margin: auto;
+}
+
+footer p{
+	text-align: center;
+	margin-bottom: 0px;
+	font-family: 'Mukta Mahee', sans-serif;
+	font-size: 26px;
+	font-weight: 700;
+	color: white;
+}

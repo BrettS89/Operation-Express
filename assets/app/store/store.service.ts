@@ -8,6 +8,10 @@ import { Store } from '../consumer/store.model';
 @Injectable()
 
 export class StoreService{
+	headers = new Headers({'Content-Type': 'application/json'});
+	token = localStorage.getItem('token') 
+				? '?token=' +localStorage.getItem('token')
+				: '';
 
 	constructor(private http: Http){}
 
@@ -15,21 +19,16 @@ export class StoreService{
 //Add a new store
 	addStore(store: {name: string, type: string, address: string, city: string, state: string, image: string}){
 		const body = JSON.stringify(store);
-		const headers = new Headers({'Content-Type': 'application/json'});
-		return this.http.post('http://localhost:3000/store/new', body, {headers: headers})
+		return this.http.post('http://localhost:3000/store/new', body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}
 
 
-//Save a new product
+//Add a new product
 	addProduct(product: Product){
 		const body = JSON.stringify(product);
-		const headers = new Headers({'Content-Type': 'application/json'});
-		const token = localStorage.getItem('token') 
-				? '?token=' +localStorage.getItem('token')
-				: '';
-		return this.http.post('http://localhost:3000/store/auth/product/new' + token, body, {headers: headers})
+		return this.http.post('http://localhost:3000/store/auth/product/new' + this.token, body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}
@@ -37,10 +36,7 @@ export class StoreService{
 
 //Get store by Id
 	getStore(id: string){
-		const token = localStorage.getItem('token') 
-				? '?token=' +localStorage.getItem('token')
-				: '';
-		return this.http.get('http://localhost:3000/store/auth/adminone/' + id + token)
+		return this.http.get('http://localhost:3000/store/auth/adminone/' + id + this.token)
 			.map((response: Response) => {
 				const data = response.json().store;
 				const store = new Store(

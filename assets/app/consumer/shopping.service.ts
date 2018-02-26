@@ -9,6 +9,9 @@ import { Order } from '../store/order.model';
 
 export class ShoppingService{
 	headers = new Headers({'Content-Type': 'application/json'});
+	token = localStorage.getItem('token') 
+				? '?token=' +localStorage.getItem('token')
+				: '';
 
 	constructor(private http: Http){}
 
@@ -64,11 +67,7 @@ export class ShoppingService{
 //Save item to shopping cart
 	addToCart(cart: {id: string, product: string, store: string}){
 		const body = JSON.stringify(cart);
-		const headers = new Headers({'Content-Type': 'application/json'});
-		const token = localStorage.getItem('token') 
-				? '?token=' +localStorage.getItem('token')
-				: '';
-		return this.http.post('http://localhost:3000/store/auth/addtocart' + token, body, {headers: headers})
+		return this.http.post('http://localhost:3000/store/auth/addtocart' + this.token, body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}	
@@ -76,10 +75,7 @@ export class ShoppingService{
 
 //Get shopping cart to place order
 	getCart(id: string){
-		const token = localStorage.getItem('token') 
-				? '?token=' +localStorage.getItem('token')
-				: '';
-		return this.http.get('http://localhost:3000/store/auth/getcart/' + id + token)
+		return this.http.get('http://localhost:3000/store/auth/getcart/' + id + this.token)
 		  .map((response: Response) => {
 		  	const data = response.json().cart;
 		  	return data;
@@ -91,11 +87,7 @@ export class ShoppingService{
 //Place order
 	placeOrder(order: Order){
 		const body = JSON.stringify(order);
-		const headers = new Headers({'Content-Type': 'application/json'});
-		const token = localStorage.getItem('token') 
-				? '?token=' +localStorage.getItem('token')
-				: '';
-		return this.http.post('http://localhost:3000/store/auth/placeorder/' + order.cart + token, body, {headers: headers})
+		return this.http.post('http://localhost:3000/store/auth/placeorder/' + order.cart + this.token, body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}
@@ -123,8 +115,7 @@ export class ShoppingService{
 //Set order as arrived
 	arrived(id: string){
 		const body = JSON.stringify({id: id});
-		const headers = new Headers({'Content-Type': 'application/json'});
-		return this.http.post('http://localhost:3000/store/arrived', body, {headers: headers})
+		return this.http.post('http://localhost:3000/store/arrived', body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}
@@ -133,11 +124,7 @@ export class ShoppingService{
 //Set completedPurchase as true
 	completedPurchase(id: string){
 		const body = JSON.stringify({id: id});
-		const headers = new Headers({'Content-Type': 'application/json'});
-		const token = localStorage.getItem('token') 
-				? '?token=' +localStorage.getItem('token')
-				: '';
-		return this.http.post('http://localhost:3000/store/auth/completed' + token, body, {headers: headers})
+		return this.http.post('http://localhost:3000/store/auth/completed' + this.token, body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}	
@@ -146,10 +133,7 @@ export class ShoppingService{
 //Remove one item from shopping cart
 	removeCartItem(data: {user: string, item: string}){
 		const body = JSON.stringify(data);
-		const token = localStorage.getItem('token') 
-				? '?token=' +localStorage.getItem('token')
-				: '';
-		return this.http.post('http://localhost:3000/store/auth/removefromcart' +token, body, {headers: this.headers})
+		return this.http.post('http://localhost:3000/store/auth/removefromcart' + this.token, body, {headers: this.headers})
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}	

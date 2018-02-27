@@ -12,6 +12,7 @@ const storeRoutes = require('./routes/store');
 
 const app = express();
 mongoose.connect('mongodb://localhost:27017/oe');
+mongoose.Promise = Promise;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

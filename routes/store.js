@@ -10,67 +10,26 @@ const CartItem = require('../models/cartItem');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-function handleError(){
-	if(err){
-		return res.status(500).json({
-			title: 'An error occured',
-			error: err
-		});
-	}
-}
 
-//Get stores
-router.get('/get', function(req, res, next){
-	Store.find({}, function(err, stores){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!stores){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find any stores'
-			});
-		}
-		res.status(200).json({
-			title: 'Stores retrieved',
-			stores: stores
-		});
-	});
+//Get all stores
+router.get('/get', async (req, res) => {
+	const stores = await Store.find({});
+	res.status(200).json({stores: stores});
 });
 
 
-//Get store by Id
-router.get('/one/:id', function(req, res, next){
-	Store.findById(req.params.id) 
-	.populate('products', ['name', 'brand', 'price', 'quantity', 'image', '_id', 'store'])
-	.exec(function(err, store){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!store){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find store'
-			});
-		}
-		console.log(store);
-		res.status(200).json({
-			title: 'Store found',
-			store: store
-		});
-	});
+//Get store by id
+router.get('/one/:id', async (req, res) => {
+	const store = await Store.findById(req.params.id) 
+						.populate('products', ['name', 'brand', 'price', 'quantity', 'image', '_id', 'store'])
+						.exec();
+	res.status(200).json({store: store});					
 });
 
 
-//Create a new store
-router.post('/new', function(req, res, next){
-	const newStore = new Store({
+//Create a new store and store admin
+router.post('/new', async (req, res) => {
+	const store = new Store({
 		name: req.body.name,
 		type: req.body.type,
 		address: req.body.address,
@@ -78,110 +37,40 @@ router.post('/new', function(req, res, next){
 		state: req.body.state,
 		image: req.body.image
 	});
-	newStore.save(function(err, newStore){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		const storeAdmin = new StoreAdmin({
+	const newStore = await store.save()
+	const storeAdmin = new StoreAdmin({
 			store: newStore._id,
 			email: (newStore.name + "." + newStore.city + "@express.com").toLowerCase().split(' ').join(''),
 			password: bcrypt.hashSync((newStore.name + "." + newStore.city + "@password").toLowerCase().split(' ').join(''), 10)
 		});
-		storeAdmin.save(function(err, admin){
-			if(err){
-				return res.status(500).json({
-					title: 'An error occured',
-					error: err
-				});
-			}
-			newStore.update({admin: admin._id}, function(err, store){
-				if(err){
-					return res.status(500).json({
-						title: 'An error occured',
-						error: err
-					});
-				}
-				res.status(201).json({
-				title: 'Store created',
-				obj: store
-			});
-			});
-		});
-		
-	});
+	const admin = await storeAdmin.save()
+	const updatedStore = await newStore.update({admin: admin._id})
+	return res.status(201).json({obj: updatedStore});
 });
 
 
-//Get order by Id
-router.get('/getorder/:id', function(req, res, next){
-	Order.findById(req.params.id)
-	.populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', select: ['_id', 'name', 'brand', 'quantity', 'price', 'image']}])
-	.exec(function(err, order){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!order){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find order'
-			});
-		}
-		res.status(200).json({
-			title: 'Order found',
-			order: order
-		});
-	});
-});	
-
-
-
+//Get order by order id
+router.get('/getorder/:id', async (req, res) => {
+	const order =  await Order.findById(req.params.id)
+				   .populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', select: ['_id', 'name', 'brand', 'quantity', 'price', 'image']}])
+				   .exec();
+	res.status(200).json({order: order});
+});
 
 
 //Get orders by user id
-router.get('/userorders/:id', function(req, res, next){
-	Order.find({user: req.params.id})
-	.populate('store', ['name', 'city'])
-	.exec(function(err, orders){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!orders){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'No orders were found'
-			});
-		}
-		res.status(200).json({
-			title: 'Orders found',
-			orders: orders
-		});
-	});
+router.get('/userorders/:id', async (req, res) => {
+	const orders = await Order.find({user: req.params.id})
+						 .populate('store', ['name', 'city'])
+						 .exec();
+	res.status(200).json({orders: orders});
 });
 
 
 //Change hasArrived field to true
-router.post('/arrived', function(req, res, next){
-	Order.update({_id: req.body.id}, {hasArrived: true}, function(err, updatedOrder){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		res.status(200).json({
-			title: 'Store has been notified of car arrival',
-			order: updatedOrder
-		});
-	});
+router.post('/arrived', async (req, res) => {
+	const order = await Order.update({_id: req.body.id}, {hasArrived: true});
+	res.status(200).json({order: order});
 });
 
 
@@ -203,80 +92,44 @@ router.use('/auth', function(req, res, next){
 });
 
 
-//Add an item to cart
-router.post('/auth/addtocart', function(req, res, next){
+//Create cart and or add item to cart
+router.post('/auth/addtocart', async (req, res) => {
 	const cartItem = new CartItem({product: req.body.product});
-	cartItem.save(function(err, cartItem){
-			if(err){
-				return res.status(500).json({
-					title: 'An error occured',
-					error: err
-				});
-			}
-			Cart.findOne({user: req.body.id}, function(err, cart){
-				if(err){
-				return res.status(500).json({
-				title: 'An error occured',
-				error: err
-				});
-			}
-				if(!cart){
-					const newCart = new Cart({
-					user: req.body.id,
-					store: req.body.store,
-					items: cartItem._id
-				  });
-					newCart.save(function(err, createdCart){
-						if(err){
-							return res.status(500).json({
-							title: 'An error occured',
-							error: err
-						});
-					}
-						cartItem.update({cart: createdCart._id});
-						return res.status(201).json({
-							title: 'Cart created',
-							cart: createdCart
-						});
-					});
-				}
-				else{
-				cart.items.push(cartItem._id);
-				cart.save();
-				cartItem.update({cart: cart._id});
-				res.status(200).json({
-					 Title: 'Item added to cart',
-					 cart: cart
-				});
-			}
-		});
-	});
+	const item = await cartItem.save();
+	const cart = await Cart.findOne({user: req.body.id});
+	if(!cart){
+		const newCart = new Cart({
+				user: req.body.id,
+				store: req.body.store,
+				items: cartItem._id
+			});
+		const createdCart = await newCart.save();
+		cartItem.update({cart: createdCart._id});
+		return res.status(201).json({cart: createdCart});
+	}
+	else{
+		cart.items.push(cartItem._id);
+		cart.save();
+		cartItem.update({cart: cart._id});
+		res.status(200).json({
+	        Title: 'Item added to cart',
+			cart: cart
+			});
+		}
 });
 
 
 //Add new product
-router.post('/auth/product/new', function(req, res, next){
-	var decoded = jwt.decode(req.query.token);
-	Store.findById(req.body.store, function(err, store){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!store){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find store'
-			});
-		}
-		if(store.admin != decoded.user._id){
+router.post('/auth/product/new', async (req, res) => {
+	const decoded = jwt.decode(req.query.token);
+	const store = await Store.findById(req.body.store);
+	if(store.admin != decoded.user._id){
 			return res.status(401).json({
         	    title: 'Not Authenticated',
        		    error: {message: 'Users do not match'}
     		});
 		}
-		const product = new Product({
+	const product = new Product({
 			store: req.body.store,
 			name: req.body.name,
 			brand: req.body.brand,
@@ -284,121 +137,42 @@ router.post('/auth/product/new', function(req, res, next){
 			quantity: req.body.quantity,
 			image: req.body.image
 		});
-		product.save(function(err, savedProduct){
-			if(err){
-				return res.status(500).json({
-					title: 'An error occured',
-					error: err
-				});
-			}
-			store.products.push(savedProduct._id);
-			store.save();
-			res.status(201).json({
-				title: 'Product saved!',
-				product: savedProduct
-			});
-		});
-	});
+	const savedProduct = await product.save();
+	store.products.push(savedProduct._id);
+	store.save();
+	res.status(200).json({product: savedProduct});
 });
 
 
-//Get shopping cart by Id
-router.get('/auth/getcart/:id', function(req, res, next){
+//Get shopping cart by id
+router.get('/auth/getcart/:id', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
-	Cart.findOne({user: req.params.id}, function(err, cart){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!cart){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'No cart was found'
-			});
-		}
-		if(cart.user != decoded.user._id){
+	const cart = await Cart.findOne({user: req.params.id})
+					   .populate({path: 'items', populate: [{path: 'product', select: ['name', 'brand', 'price', 'quantity', 'image']}]})
+	   				   .exec();
+	if(cart.user != decoded.user._id){
       		return res.status(401).json({
      		   title: 'Not Authenticated',
       		   error: {message: 'Users do not match'}
     		});
   		  }
-		Cart.findById(cart._id)
-		// .populate('products', ['name', 'brand', 'price', 'quantity', 'image']) 
-		.populate({path: 'items', populate: [{path: 'product', select: ['name', 'brand', 'price', 'quantity', 'image']}]})
-	    .exec(function(err, foundCart){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!cart){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find cart'
-			});
-		}
-		res.status(200).json({
-			title: 'Cart retrieved',
-			cart: foundCart
-		});
-	});
-  });
+  	res.status(200).json({cart: cart});	  
 });
 
 
-//Place order
-router.post('/auth/placeorder/:id', function(req, res, next){
+//Place an order
+router.post('/auth/placeorder/:id', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
-	Cart.findById(req.params.id, function(err, cart){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!cart){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find cart'
-			});
-		}
-		if(cart.user != decoded.user._id){
+	const cart = await Cart.findById(req.params.id);
+	if(cart.user != decoded.user._id){
       		return res.status(401).json({
      		   title: 'Not Authenticated',
       		   error: {message: 'Users do not match'}
     		});
   		  }
-		Store.findById(req.body.store, function(err, store){
-			if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!store){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find store'
-			});
-		}
-		User.findById(req.body.user, function(err, user){
-			if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-			if(!user){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find user'
-			});
-		}
-
-		const newOrder = new Order({
+  	const store = await Store.findById(req.body.store);
+  	const user = await User.findById(req.body.user);
+  	const newOrder = new Order({
 			user: req.body.user,
 			store: req.body.store,
 			products: req.body.products,
@@ -406,131 +180,59 @@ router.post('/auth/placeorder/:id', function(req, res, next){
 			tax: req.body.tax,
 			total: req.body.total
 		});
-		newOrder.save(function(err, order){
-			if(err){
-				return res.status(500).json({
-					title: 'An error occured',
-					error: err
-				});
-			}
-			store.orders.push(order);
+	const order = await newOrder.save();
+	store.orders.push(order);
 			store.save();
 			user.orders.push(order);
 			user.save();
 			cart.remove();
-			// CartItem.remove({cart: cart._id});
 			res.status(201).json({
 				title: 'Order placed',
 				order: order
-			});
-		});
-		});
-		});
-	});
+			});	  
 });
 
 
 //Get store for dashboard
-router.get('/auth/adminone/:id', function(req, res, next){
+router.get('/auth/adminone/:id', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
-	Store.findById(req.params.id) 
-	.populate({path: 'orders', populate: [{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}]})
-	.exec(function(err, store){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!store){
-			return res.status(500).json({
-				title: 'Query failed',
-				message: 'Could not find store'
-			});
-		}
-		if(store.admin != decoded.user._id){
+	const store = await Store.findById(req.params.id) 
+						.populate({path: 'orders', populate: [{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}]})
+						.exec();
+	if(store.admin != decoded.user._id){
 			return res.status(401).json({
      		   title: 'Not Authenticated',
       		   error: {message: 'Users do not match'}
     		});
 		}
-		res.status(200).json({
-			title: 'Store found',
-			store: store
-		});
-	});
+	res.status(200).json({store: store});						
 });
 
 
 //Change completedPurchase to true
-router.post('/auth/completed', function(req, res, next){
-	Order.update({_id: req.body.id}, {completedPurchase: true}, function(err, completedOrder){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		res.status(200).json({
-			title: 'Order has been completed',
-			order: completedOrder
-		});
-	});
+router.post('/auth/completed', async (req, res) => {
+	const completedOrder = await Order.update({_id: req.body.id}, {completedPurchase: true});
+	res.status(200).json({order: completedOrder});
 });
 
 
 //Remove a product from shopping cart
-router.post('/auth/removefromcart', function(req, res, next){
+router.post('/auth/removefromcart', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
-	Cart.findOne({user: req.body.user}, function(err, cart){
-		if(err){
-			return res.status(500).json({
-				title: 'An error occured',
-				error: err
-			});
-		}
-		if(!cart){
-			return res.status(404).json({
-				title: 'Query failed',
-				message: 'No cart was found'
-			});
-		}
-		if(cart.user != decoded.user._id){
+	const cart = await Cart.findOne({user: req.body.user});
+	if(cart.user != decoded.user._id){
 			return res.status(401).json({
      		   title: 'Not Authenticated',
       		   error: {message: 'Users do not match'}
     		});
 		}
-		console.log(cart);
-		CartItem.findById(req.body.item, function(err, item){
-			if(err){
-				return res.status(500).json({
-					title: 'An error occured',
-					error: err
-				});
-			}
-			if(!item){
-			return res.status(404).json({
-				title: 'Query failed',
-				message: 'No item was found'
-			});
-		}
-		cart.items.pull(item);
-		cart.save(function(err, updatedCart){
-			if(err){
-				return res.status(500).json({
-					title: 'An error occured',
-					error: err
-				});
-			}
-			console.log(updatedCart);
-			res.status(200).json({
-				title: 'Product was removed from cart',
-				cart: updatedCart
-			});
-		});
-		});
-	});
+	const item = await CartItem.findById(req.body.item);
+	cart.items.pull(item);
+	cart.save();
+	const updatedCart = await Cart.findOne({user: req.body.user})
+							  .populate({path: 'items', populate: [{path: 'product', select: ['name', 'brand', 'price', 'quantity', 'image']}]})
+	   				   		  .exec();	
+	res.status(200).json({cart: updatedCart});	
 });
 
 module.exports = router;

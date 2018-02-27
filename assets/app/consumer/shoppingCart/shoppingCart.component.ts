@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, NgZone} from '@angular/core';
 import { ShoppingService } from '../shopping.service';
 import { Router } from '@angular/router';
 
@@ -16,11 +16,15 @@ export class ShoppingCartComponent implements OnInit{
 	total: number;
 
 	constructor(private shoppingService: ShoppingService,
-				private router: Router){}
+				private router: Router,
+				private ngZone: NgZone){}
 
 	ngOnInit(){
+		this.ngZone.run(() => {
 		this.shoppingService.getCart(localStorage.getItem('userId'))
 		  .subscribe((data) => {
+		  	
+		  		// this.products = [];
 		  		this.products = data.items;
 		  		this.id = data._id;
 		  		for(let product of data.items){
@@ -29,7 +33,10 @@ export class ShoppingCartComponent implements OnInit{
 		  		this.tax = Math.round(100 * (this.subTotal * .07))/100;
 		  		this.total = this.subTotal + this.tax;
 		  		this.total = Math.round(100 * (this.subTotal + this.tax))/100;
-		  	});
+		  	
+		  	},
+		  	error => console.log(error));
+		  	})
 	}
 
 	proceedToCheckout(){

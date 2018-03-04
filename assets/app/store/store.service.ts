@@ -17,7 +17,7 @@ export class StoreService{
 
 
 //Add a new store
-	addStore(store: {name: string, type: string, address: string, city: string, state: string, image: string}){
+	addStore(store: {name: string, type: string, address: string, city: string, state: string, zip: string, image: string}){
 		const body = JSON.stringify(store);
 		return this.http.post('http://localhost:3000/store/new', body, {headers: this.headers})
 		  .map((response: Response) => response.json())
@@ -46,6 +46,7 @@ export class StoreService{
 						data.address,
 						data.city,
 						data.state,
+						data.zip,
 						data.image,
 						data.products,
 						data.orders,

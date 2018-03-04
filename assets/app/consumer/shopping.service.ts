@@ -29,6 +29,7 @@ export class ShoppingService{
 						store.address,
 						store.city,
 						store.state,
+						store.zip,
 						store.image,
 						store.products,
 						store.orders,
@@ -52,6 +53,7 @@ export class ShoppingService{
 						data.type,
 						data.address,
 						data.city,
+						data.zip,
 						data.state,
 						data.image,
 						data.products,
@@ -137,5 +139,12 @@ export class ShoppingService{
 		  .map((response: Response) => response.json())
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}	
+
+	sendZip(data: {zip: string}){
+		const body = JSON.stringify(data);
+		return this.http.post('http://localhost:3000/store/zip', body, {headers: this.headers})
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}
 
 }

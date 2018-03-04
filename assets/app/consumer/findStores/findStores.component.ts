@@ -21,4 +21,12 @@ export class FindStoresComponent implements OnInit{
 				);
 	}
 
+	doIt(){
+		this.shoppingService.sendZip({zip: '08540'})
+		  .subscribe(
+		  	data => console.log(data),
+		  	error => console.log(error)
+		  	);
+	}
+
 }

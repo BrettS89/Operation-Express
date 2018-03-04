@@ -22,13 +22,15 @@ export class CartItemComponent implements OnInit{
 			user: localStorage.getItem('userId'),
 			item: this.product._id 
 		}
+		const item = this.product;
 
 		this.shoppingService.removeCartItem(toRemove)
 		  .subscribe(
 		  		data => console.log(data),
 		  		error => console.log(error)
 		  	);
-		this.removed.emit('item removed');  
+		this.removed.emit(item);  
+		location.reload();
 
 	}
 }

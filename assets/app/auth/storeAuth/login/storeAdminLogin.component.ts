@@ -30,7 +30,7 @@ export class StoreAdminLoginComponent{
 			localStorage.setItem('storeId', data.obj.store._id);
 			localStorage.setItem('storeName', data.obj.store.name);
 			localStorage.setItem('storeCity', data.obj.store.city);
-		  	this.router.navigate(['/store', 'dashboard', data.obj.store._id]);
+		  	window.location.href = '/store/dashboard/' + data.obj.store._id;
 		  }),
 		  error => console.log(error);
 	}

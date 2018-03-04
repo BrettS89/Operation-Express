@@ -28,7 +28,7 @@ export class HeaderComponent{
 
 	logout(){
 		this.consumerAuth.logout();
-		this.router.navigate(['/']);
+		window.location.href = '/';
 	}
 
 	isStoreAdmin(){

@@ -9,6 +9,7 @@ const storeSchema = new mongoose.Schema({
 	address: {type: String, required: true},
 	city: {type: String, required: true},
 	state: {type: String, required: true},
+	zip: {type: String, required: true},
 	image: {type: String, required: true},
 	products: [{type: mongoose.Schema.Types.ObjectId, ref: 'Product'}],
 	orders: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}],

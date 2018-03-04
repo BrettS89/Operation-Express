@@ -30,7 +30,7 @@ export class UserSignupComponent{
 					localStorage.setItem('userId', data.obj._id);
 					localStorage.setItem('firstName', data.obj.firstName);
 					localStorage.setItem('lastName', data.obj.lastName);
-					this.router.navigate(['/stores/find']);
+					window.location.href = '/stores/find';
 				},
 					error => console.log(error)
 				);

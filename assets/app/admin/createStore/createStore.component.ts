@@ -21,6 +21,7 @@ export class CreateStoreComponent{
 			address: form.value.address,
 			city: form.value.city,
 			state: form.value.state,
+			zip: form.value.zip,
 			image: form.value.image
 		}
 		this.storeService.addStore(newStore)

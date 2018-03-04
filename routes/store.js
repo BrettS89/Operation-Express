@@ -9,6 +9,28 @@ const StoreAdmin = require('../models/storeadmin');
 const CartItem = require('../models/cartItem');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+var request = require('superagent');
+const keys = require('../classified/keys');
+
+
+//Get stores with city of 
+router.post('/zip', function(req, res, next){
+
+        request.get('https://www.zipcodeapi.com/rest/' + keys.zipKey + '/radius.json/' + req.body.zip + '/7/miles?minimal')
+            .end(function(err, response) {
+            	const obj = JSON.parse(response.text)
+            	// res.status(200).json(obj)
+            	console.log(obj);
+            	Store.find({zip: obj.zip_codes}, (err, stores) =>{
+            		if(err){
+            			return res.status(500).json({
+            				error: err
+            			});
+            		}
+            		res.status(200).json({stores: stores});
+            	});
+          });    
+});
 
 
 //Get all stores
@@ -35,6 +57,7 @@ router.post('/new', async (req, res) => {
 		address: req.body.address,
 		city: req.body.city,
 		state: req.body.state,
+		zip: req.body.zip,
 		image: req.body.image
 	});
 	const newStore = await store.save()
@@ -228,11 +251,9 @@ router.post('/auth/removefromcart', async (req, res) => {
 		}
 	const item = await CartItem.findById(req.body.item);
 	cart.items.pull(item);
-	cart.save();
-	const updatedCart = await Cart.findOne({user: req.body.user})
-							  .populate({path: 'items', populate: [{path: 'product', select: ['name', 'brand', 'price', 'quantity', 'image']}]})
-	   				   		  .exec();	
+	const updatedCart = await cart.save();
 	res.status(200).json({cart: updatedCart});	
 });
+
 
 module.exports = router;

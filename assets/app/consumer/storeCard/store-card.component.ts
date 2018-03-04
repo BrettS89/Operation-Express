@@ -14,7 +14,7 @@ export class StoreCardComponent{
 	constructor(private router: Router){}
 
 	onClick(){
-		this.router.navigate(['/', 'stores', this.store.id]);
+		this.router.navigate(['stores', this.store.id]);
 	}
 
 }

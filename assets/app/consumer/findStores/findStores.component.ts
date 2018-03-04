@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ShoppingService } from '../shopping.service';
 import { Store } from '../store.model';
 
@@ -14,19 +15,22 @@ export class FindStoresComponent implements OnInit{
 	constructor(private shoppingService: ShoppingService){}
 
 	ngOnInit(){
-		this.shoppingService.getStores()
-			.subscribe(
-					data => this.stores = data,
-					error => console.log(error)
-				);
+		// this.shoppingService.getStores()
+		// 	.subscribe(
+		// 			data => this.stores = data,
+		// 			error => console.log(error)
+		// 		);
 	}
 
-	doIt(){
-		this.shoppingService.sendZip({zip: '08540'})
-		  .subscribe(
-		  	data => console.log(data),
-		  	error => console.log(error)
-		  	);
+	doIt(form: NgForm){
+		this.shoppingService.sendZip({zip: form.value.zip})
+		  .subscribe((data) =>{
+		  	this.stores = data;
+		  },
+		  error => console.log(error)
+		  );
+
+		  	
 	}
 
 }

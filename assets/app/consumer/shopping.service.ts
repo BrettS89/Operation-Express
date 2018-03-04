@@ -140,11 +140,32 @@ export class ShoppingService{
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}	
 
+
+//
 	sendZip(data: {zip: string}){
 		const body = JSON.stringify(data);
 		return this.http.post('http://localhost:3000/store/zip', body, {headers: this.headers})
-		  .map((response: Response) => response.json())
-		  .catch((error: Response) => Observable.throw(error.json()));
+		  .map((response: Response) => {
+				const res = response.json().stores;
+				let stores: Store[] = [];
+				for(let store of res){
+					stores.push(new Store(
+						store._id,
+						store.name,
+						store.type,
+						store.address,
+						store.city,
+						store.state,
+						store.zip,
+						store.image,
+						store.products,
+						store.orders,
+						store.createdDate
+						));
+				}
+				return stores; 
+			})
+			.catch((error: Response) => Observable.throw(error.json()));
 	}
 
 }

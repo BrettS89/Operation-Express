@@ -16,6 +16,7 @@ export class HeaderComponent{
 	storeCity: string = localStorage.getItem('storeCity');
 	firstName: string = localStorage.getItem('firstName');
 	userId: string = localStorage.getItem('userId');
+	userName: string = localStorage.getItem('userName');
 
 	constructor(private consumerAuth: ConsumerAuthService,
 				private storeAuth: StoreAuthService,
@@ -32,7 +33,11 @@ export class HeaderComponent{
 	}
 
 	isStoreAdmin(){
-		return this.storeAuth.isLoggedIn();
+		return this.storeAuth.isAdmin();
+	}
+
+	isStore(){
+		return this.storeAuth.isStore();
 	}
 
 //Navigate to my orders page

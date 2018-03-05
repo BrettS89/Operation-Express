@@ -1,14 +1,38 @@
-<h1>Store login</h1>
-    <div class="sform">  
-	    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
-	        <div class="form-group">
-	            <input ngModel class="form-control" type="email" name="email" placeholder="Email">
-	        </div>    
-	        <div class="form-group">
-	            <input ngModel class="form-control" type="password" name="password" placeholder="password">
-	        </div>
-	        <div class="form-group">
-	            <button class="btn btn-primary btn-block">Login</button>
-	        </div>
-	    </form>
-    </div>
+<div class="everything">
+  <div class="adminLogin">	
+	<h1>Store admin login</h1>
+	    <div class="sform">  
+		    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+		        <div class="form-group">
+		            <input ngModel class="form-control" type="email" name="email" placeholder="Email">
+		        </div>    
+		        <div class="form-group">
+		            <input ngModel class="form-control" type="password" name="password" placeholder="password">
+		        </div>
+		        <div class="form-group">
+		            <button class="btn btn-primary btn-block">Login</button>
+		        </div>
+		    </form>
+	    </div>
+  </div>
+
+  <hr>
+
+  <div class="employeeLogin">	
+	<h1>Employee login</h1>
+	    <div class="sform">  
+		    <form (ngSubmit)="employeeLogin(j)" #j="ngForm">
+		        <div class="form-group">
+		            <input ngModel class="form-control" type="text" name="userName" placeholder="Username">
+		        </div>    
+		        <div class="form-group">
+		            <input ngModel class="form-control" type="password" name="password2" placeholder="password">
+		        </div>
+		        <div class="form-group">
+		            <button class="btn btn-primary btn-block">Login</button>
+		        </div>
+		    </form>
+	    </div>
+  </div>
+
+</div>

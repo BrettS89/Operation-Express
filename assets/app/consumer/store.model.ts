@@ -10,6 +10,7 @@ export class Store{
 				public image: string,
 				public products,
 				public orders,
-				public createdDate
+				public createdDate,
+				public employees?
 			){}
 }

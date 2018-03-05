@@ -1,14 +1,26 @@
+.everything{
+	/*display: flex;
+	flex-direction: row;
+	justify-content: space-around;*/
+}
+
 h1{
 	text-align: center;
 	margin: 40px auto;
 }
 
 .sform{
-	width: 30%;
+	width: 350px;
 	text-align: center;
 	margin: 0 auto;
 }
 
 input{
 	border-radius: 17px;
+}
+
+hr{
+	width: 350px;
+	border: 1px solid gray;
+	margin-top: 50px;
 }

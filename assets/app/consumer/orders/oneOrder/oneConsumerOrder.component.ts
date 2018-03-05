@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 export class OneConsumerOrderComponent implements OnInit{
 	id: string;
 	order: Order;
+	accepted: boolean;
 	subTotal: number = 0;
 
 	constructor(private shoppingService: ShoppingService,
@@ -25,6 +26,7 @@ export class OneConsumerOrderComponent implements OnInit{
 			.subscribe((data) =>{
 				console.log(data)
 				this.order = data;
+				this.accepted = data.accepted;
 			}),
 			error => console.log(error);
 	}

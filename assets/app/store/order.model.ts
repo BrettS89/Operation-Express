@@ -10,7 +10,8 @@ export class Order{
 				public id?: string,
 				public createdDate?: string,
 				public completedPurchase?: boolean,
-				public hasArrived?: boolean
+				public hasArrived?: boolean,
+				public accepted?: boolean
 
 			){}
 }

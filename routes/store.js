@@ -13,13 +13,12 @@ var request = require('superagent');
 const keys = require('../classified/keys');
 
 
-//Get stores with city of 
+//Get stores near searched zipcode
 router.post('/zip', function(req, res, next){
 
         request.get('https://www.zipcodeapi.com/rest/' + keys.zipKey + '/radius.json/' + req.body.zip + '/7/miles?minimal')
             .end(function(err, response) {
             	const obj = JSON.parse(response.text)
-            	// res.status(200).json(obj)
             	console.log(obj);
             	Store.find({zip: obj.zip_codes}, (err, stores) =>{
             		if(err){
@@ -219,10 +218,11 @@ router.post('/auth/placeorder/:id', async (req, res) => {
 //Get store for dashboard
 router.get('/auth/adminone/:id', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
+	console.log(decoded.user._id);
 	const store = await Store.findById(req.params.id) 
 						.populate({path: 'orders', populate: [{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}]})
 						.exec();
-	if(store.admin != decoded.user._id){
+	if(store.admin != decoded.user._id && store.employees.indexOf(decoded.user._id) < 0){
 			return res.status(401).json({
      		   title: 'Not Authenticated',
       		   error: {message: 'Users do not match'}

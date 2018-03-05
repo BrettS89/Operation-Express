@@ -12,6 +12,7 @@ const orderSchema = new mongoose.Schema({
 	subTotal: {type: Number, required: true},
 	tax: {type: Number, required: true},
 	total: {type: Number, required: true},
+	accepted: {type: Boolean, default: false},
 	completedPurchase: {type: Boolean, default: false},
 	hasArrived: {type: Boolean, default: false}
 });

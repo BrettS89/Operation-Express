@@ -17,6 +17,7 @@ import { ConsumerOrdersComponent } from './consumer/orders/consumerOrders.compon
 import { OneConsumerOrderComponent } from './consumer/orders/oneOrder/oneConsumerOrder.component';
 import { SingleOrderComponent } from './store/dashboard/singleOrder/singleOrder.component';
 import { AddProductComponent } from './store/addProduct/addProduct.component';
+import { CreateEmployeeComponent } from './auth/storeAuth/createEmployee/createEmployee.component';
 
 
 const APP_ROUTES: Routes = [
@@ -36,7 +37,8 @@ const APP_ROUTES: Routes = [
 		{path: 'dashboard/:id', component: DashboardComponent},
 		{path: 'dashboard/order/:id', component: SingleOrderComponent},
 		{path: 'login', component: StoreAdminLoginComponent},
-		{path: 'addproduct', component: AddProductComponent}
+		{path: 'addproduct', component: AddProductComponent},
+		{path: 'createemployee', component: CreateEmployeeComponent}
 	]},
 	{path: 'create', component: CreateStoreComponent}
 ];

@@ -25,6 +25,7 @@ import { UserSignupComponent } from './auth/consumerAuth/singup/userSignup.compo
 import { UserLoginComponent } from './auth/consumerAuth/login/userLogin.component';
 import { CreateStoreComponent } from './admin/createStore/createStore.component';
 import { StoreAdminLoginComponent } from './auth/storeAuth/login/storeAdminLogin.component';
+import { CreateEmployeeComponent } from './auth/storeAuth/createEmployee/createEmployee.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import { StoreAdminLoginComponent } from './auth/storeAuth/login/storeAdminLogin
     UserSignupComponent,
     UserLoginComponent,
     CreateStoreComponent,
-    StoreAdminLoginComponent
+    StoreAdminLoginComponent,
+    CreateEmployeeComponent
     ],
     imports: [
 	    BrowserModule, 

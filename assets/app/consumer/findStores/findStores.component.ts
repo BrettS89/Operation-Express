@@ -29,7 +29,7 @@ export class FindStoresComponent implements OnInit{
 		  },
 		  error => console.log(error)
 		  );
-
+		  form.resetForm();
 		  	
 	}
 

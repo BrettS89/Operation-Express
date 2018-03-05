@@ -3,7 +3,9 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const Store = require('../models/store');
 const StoreAdmin = require('../models/storeadmin');
+const Employee = require('../models/employee');
 
 
 //New user signup
@@ -91,5 +93,39 @@ router.post('/storeadminlogin', function(req, res, next){
 		});
 	});
 });
+
+
+//Create employee
+router.post('/employee', async (req, res) =>{
+	const employee = new Employee({
+		store: req.body.store,
+		userName: req.body.userName,
+		password: bcrypt.hashSync(req.body.password, 10)
+	});
+	const newEmployee = await employee.save();
+	const store = await Store.findById(req.body.store);
+	store.employees.push(newEmployee._id);
+	store.save();
+	res.status(201).json({employee: newEmployee});
+});
+
+
+//Employee login
+router.post('/employee/login', async (req, res) =>{
+	const user = await Employee.findOne({userName: req.body.userName});
+	if (!bcrypt.compareSync(req.body.password, user.password)){
+                    return res.status(401).json({
+                    title: 'Login failed',
+                    error: {message: 'Invalid login credentials'}
+                }); 
+            }
+    const token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+		res.status(200).json({
+			title: 'Employee found',
+			obj: user,
+			token: token
+		});        
+});
+
 
 module.exports = router;

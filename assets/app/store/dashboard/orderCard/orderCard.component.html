@@ -5,6 +5,9 @@
   <button class="btn btn-success" (click)="singleOrder()">
 
  View Order</button>
+   <button class="btn btn-success" (click)="claimOrder()" *ngIf="!order.accepted">
+
+ Claim Order</button>
 </div>    
   <div class="card-body">
     <div class="details">

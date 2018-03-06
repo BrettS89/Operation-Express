@@ -28,6 +28,7 @@ export class SingleOrderComponent implements OnInit{
 
 
 	completeOrder(){
+		console.log(this.order._id);
 		this.shoppingService.completedPurchase(this.order._id)
 		  .subscribe(
 		  		data => console.log(data),

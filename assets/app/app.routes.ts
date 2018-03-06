@@ -18,7 +18,7 @@ import { OneConsumerOrderComponent } from './consumer/orders/oneOrder/oneConsume
 import { SingleOrderComponent } from './store/dashboard/singleOrder/singleOrder.component';
 import { AddProductComponent } from './store/addProduct/addProduct.component';
 import { CreateEmployeeComponent } from './auth/storeAuth/createEmployee/createEmployee.component';
-
+import { NewOrdersComponent } from './store/newOrders/newOrders.component';
 
 const APP_ROUTES: Routes = [
 	{path: '', component: LandingComponent},
@@ -38,7 +38,8 @@ const APP_ROUTES: Routes = [
 		{path: 'dashboard/order/:id', component: SingleOrderComponent},
 		{path: 'login', component: StoreAdminLoginComponent},
 		{path: 'addproduct', component: AddProductComponent},
-		{path: 'createemployee', component: CreateEmployeeComponent}
+		{path: 'createemployee', component: CreateEmployeeComponent},
+		{path: 'neworders/:id', component: NewOrdersComponent}
 	]},
 	{path: 'create', component: CreateStoreComponent}
 ];

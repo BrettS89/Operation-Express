@@ -11,7 +11,8 @@ export class Order{
 				public createdDate?: string,
 				public completedPurchase?: boolean,
 				public hasArrived?: boolean,
-				public accepted?: boolean
+				public accepted?: boolean,
+				public employee?: string
 
 			){}
 }

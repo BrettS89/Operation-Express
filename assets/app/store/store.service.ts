@@ -56,5 +56,30 @@ export class StoreService{
 			})
 			.catch((error: Response) => Observable.throw(error.json()));
 	}
+
+
+//Get new orders
+	newOrders(id: string){
+		return this.http.get('http://localhost:3000/store/auth/neworders/' + id + this.token)
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}	
+
+
+//Claim order
+	claimOrder(data: {order: string, employee: string}){
+		const body = JSON.stringify(data);
+		return this.http.post('http://localhost:3000/store/auth/accept' + this.token, body, {headers: this.headers})
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}
+
+
+//Get employee's orders
+	employeeOrders(id: string){
+		return this.http.get('http://localhost:3000/store/auth/employeeorders/' + id + this.token)
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}		
 	
 }

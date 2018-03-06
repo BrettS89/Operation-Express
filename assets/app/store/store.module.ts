@@ -9,6 +9,7 @@ import { OrderCard2Component } from './dashboard/orderCard2/orderCard2.component
 import { SingleOrderComponent } from './dashboard/singleOrder/singleOrder.component';
 import { ProductRowComponent } from './dashboard/singleOrder/productRow/productRow.component';
 import { AddProductComponent } from './addProduct/addProduct.component';
+import { NewOrdersComponent } from './newOrders/newOrders.component';
 
 @NgModule({
 	declarations: [
@@ -18,7 +19,8 @@ import { AddProductComponent } from './addProduct/addProduct.component';
 		OrderCard2Component,
 		SingleOrderComponent,
 		ProductRowComponent,
-		AddProductComponent
+		AddProductComponent,
+		NewOrdersComponent
 	],
 	imports: [
 		CommonModule, 

@@ -218,7 +218,6 @@ router.post('/auth/placeorder/:id', async (req, res) => {
 //Get store for dashboard
 router.get('/auth/adminone/:id', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
-	console.log(decoded.user._id);
 	const store = await Store.findById(req.params.id) 
 						.populate({path: 'orders', populate: [{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}]})
 						.exec();
@@ -229,6 +228,16 @@ router.get('/auth/adminone/:id', async (req, res) => {
     		});
 		}
 	res.status(200).json({store: store});						
+});
+
+
+//Get orders for new orders dashboard
+router.get('/auth/neworders/:id', async (req, res) => {
+	var decoded = jwt.decode(req.query.token);
+	const orders = await Order.find({store: req.params.id, accepted: false})
+						 .populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}, {path: 'store', select: ['name', 'city']}])
+						 .exec();
+	res.status(200).json(orders);					 
 });
 
 
@@ -253,6 +262,31 @@ router.post('/auth/removefromcart', async (req, res) => {
 	cart.items.pull(item);
 	const updatedCart = await cart.save();
 	res.status(200).json({cart: updatedCart});	
+});
+
+
+//Employee accept order
+router.post('/auth/accept', async (req, res) => {
+	var decoded = jwt.decode(req.query.token);
+	if(req.body.employee != decoded.user._id){
+		return res.status(401).json({
+     		   title: 'Not Authenticated',
+      		   error: {message: 'Users do not match'}
+    		});
+	}
+	const order = await Order.findById(req.body.order);
+	const updatedOrder = await order.update({employee: req.body.employee, accepted: true});
+	res.status(200).json(updatedOrder);
+});
+
+
+//Get an employee's orders
+router.get('/auth/employeeorders/:id', async (req, res) => {
+	var decoded = jwt.decode(req.query.token);
+	const orders = await Order.find({employee: req.params.id, completedPurchase: false})
+						 .populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}, {path: 'store', select: ['name', 'city']}])
+						 .exec();
+	res.status(200).json(orders);
 });
 
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = require('./user');
 const Product = require('./product');
 const Store = require('./store');
+const Employee = require('./employee')
 
 const orderSchema = new mongoose.Schema({
 	
@@ -14,7 +15,8 @@ const orderSchema = new mongoose.Schema({
 	total: {type: Number, required: true},
 	accepted: {type: Boolean, default: false},
 	completedPurchase: {type: Boolean, default: false},
-	hasArrived: {type: Boolean, default: false}
+	hasArrived: {type: Boolean, default: false},
+	employee: {type: mongoose.Schema.Types.ObjectId, ref: 'Employee'}
 });
 
 module.exports = mongoose.model('Order', orderSchema);

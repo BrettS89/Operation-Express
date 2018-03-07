@@ -9,7 +9,7 @@ const StoreAdmin = require('../models/storeadmin');
 const CartItem = require('../models/cartItem');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-var request = require('superagent');
+const request = require('superagent');
 const keys = require('../classified/keys');
 
 
@@ -96,6 +96,16 @@ router.post('/arrived', async (req, res) => {
 });
 
 
+//Get zip code by coordinates
+router.get('/getzip/:lat/:long', async (req, res) => {
+	request.get('http://www.mapquestapi.com/geocoding/v1/reverse?key=' + keys.mapQuestKey + '&location=' + req.params.lat + ',' + req.params.long + '&includeRoadMetadata=true&includeNearestIntersection=true')
+	.end((err, response) => {
+		const obj = JSON.parse(response.text);
+		res.status(200).json(obj);
+	});
+});
+
+
 //=====================================================================
 //Protected Routes
 //=====================================================================
@@ -130,6 +140,11 @@ router.post('/auth/addtocart', async (req, res) => {
 		return res.status(201).json({cart: createdCart});
 	}
 	else{
+		const prod = await Product.findById(req.body.product);
+		if(prod.store.toString() !== cart.store.toString()){
+			return res.status(401).json({message: 'Connot combine stores in one shopping cart'});
+		}
+		else{
 		cart.items.push(cartItem._id);
 		const updatedCart = await cart.save();
 		cartItem.update({cart: cart._id});
@@ -137,6 +152,7 @@ router.post('/auth/addtocart', async (req, res) => {
 	        Title: 'Item added to cart',
 			cart: updatedCart
 			});
+		  }
 		}
 });
 
@@ -276,6 +292,10 @@ router.post('/auth/removefromcart', async (req, res) => {
 	const item = await CartItem.findById(req.body.item);
 	cart.items.pull(item);
 	const updatedCart = await cart.save();
+	if(updatedCart.items.length === 0){
+		updatedCart.remove();
+		return res.status(200).json({message: 'Cart is empty'});
+	}
 	res.status(200).json({cart: updatedCart});	
 });
 

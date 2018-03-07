@@ -160,7 +160,7 @@ export class ShoppingService{
 	}	
 
 
-//
+//Get stores near a zipcode
 	sendZip(data: {zip: string}){
 		const body = JSON.stringify(data);
 		return this.http.post('http://localhost:3000/store/zip', body, {headers: this.headers})
@@ -186,5 +186,13 @@ export class ShoppingService{
 			})
 			.catch((error: Response) => Observable.throw(error.json()));
 	}
+
+
+//Send coordinates to get zipcode
+	sendCoords(coords: {lat: string, long: string}){
+		return this.http.get('http://localhost:3000/store/getzip/'+ coords.lat + '/' + coords.long)
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}	
 
 }

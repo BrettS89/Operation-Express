@@ -131,11 +131,11 @@ router.post('/auth/addtocart', async (req, res) => {
 	}
 	else{
 		cart.items.push(cartItem._id);
-		cart.save();
+		const updatedCart = await cart.save();
 		cartItem.update({cart: cart._id});
 		res.status(200).json({
 	        Title: 'Item added to cart',
-			cart: cart
+			cart: updatedCart
 			});
 		}
 });
@@ -179,6 +179,20 @@ router.get('/auth/getcart/:id', async (req, res) => {
     		});
   		  }
   	res.status(200).json({cart: cart});	  
+});
+
+
+//Get cart item count
+router.get('/auth/itemcount/:id', async (req, res) => {
+	var decoded = jwt.decode(req.query.token);
+	const itemCount = await Cart.findOne({user: req.params.id})
+	if(itemCount.user != decoded.user._id){
+      		return res.status(401).json({
+     		   title: 'Not Authenticated',
+      		   error: {message: 'Users do not match'}
+    		});
+  		  }
+  	res.status(200).json({itemCount: itemCount.items.length});	  
 });
 
 

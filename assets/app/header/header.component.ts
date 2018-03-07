@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConsumerAuthService } from '../auth/consumerAuth/consumerAuth.service';
 import { StoreAuthService } from '../auth/storeAuth/storeAuth.service';
 import { Router } from '@angular/router';
 import { ShoppingService } from '../consumer/shopping.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
 	selector: 'app-header',
@@ -10,18 +11,32 @@ import { ShoppingService } from '../consumer/shopping.service';
 	styleUrls: ['./header.component.css']
 })
 
-export class HeaderComponent{
+export class HeaderComponent implements OnInit{
 	storeId: string = localStorage.getItem('storeId');
 	storeName: string = localStorage.getItem('storeName');
 	storeCity: string = localStorage.getItem('storeCity');
 	firstName: string = localStorage.getItem('firstName');
 	userId: string = localStorage.getItem('userId');
 	userName: string = localStorage.getItem('userName');
+	itemCount: number = 0;
+	subscription: Subscription;
 
 	constructor(private consumerAuth: ConsumerAuthService,
 				private storeAuth: StoreAuthService,
 				private router: Router,
-				private shoppingService: ShoppingService){}
+				private shoppingService: ShoppingService){
+		this.subscription = this.shoppingService.getCount()
+		  .subscribe(cart => {
+		  	console.log(cart);
+		  	this.itemCount = cart.cart.items.length;
+		  });
+	}
+
+ngOnInit(){
+	this.shoppingService.getCartItemCount(localStorage.getItem('userId'))
+		  .subscribe(data => this.itemCount = data.itemCount);
+
+}
 	
 	loggedIn(){
 		return this.consumerAuth.isLoggedIn();
@@ -44,7 +59,6 @@ export class HeaderComponent{
 	myOrders(){
 		this.router.navigate(['/myorders']);
 	}	
-
 
 
 }

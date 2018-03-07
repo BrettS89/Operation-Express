@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 import { Store } from './store.model';
 import { Order } from '../store/order.model';
 
@@ -12,6 +13,7 @@ export class ShoppingService{
 	token = localStorage.getItem('token') 
 				? '?token=' +localStorage.getItem('token')
 				: '';
+	private subject = new Subject<any>();
 
 	constructor(private http: Http){}
 
@@ -67,12 +69,15 @@ export class ShoppingService{
 
 
 //Save item to shopping cart
-	addToCart(cart: {id: string, product: string, store: string}){
+	addToCart(cart: any){
 		const body = JSON.stringify(cart);
 		return this.http.post('http://localhost:3000/store/auth/addtocart' + this.token, body, {headers: this.headers})
-		  .map((response: Response) => response.json())
+		  .map((response: Response) => {
+		  	const res = response.json();
+		  	this.subject.next(res);
+		  })
 		  .catch((error: Response) => Observable.throw(error.json()));
-	}	
+	}
 
 
 //Get shopping cart to place order
@@ -84,6 +89,20 @@ export class ShoppingService{
 		  })
 		  .catch((error: Response) => Observable.throw(error.json()));
 	}
+
+
+//Get number of items in cart
+	getCartItemCount(id: string){
+		return this.http.get('http://localhost:3000/store/auth/itemcount/' + id + this.token)
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}	
+
+
+//Get count in header
+	getCount(): Observable<any> {
+        return this.subject.asObservable();
+    }
 
 
 //Place order

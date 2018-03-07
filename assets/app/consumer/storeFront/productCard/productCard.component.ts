@@ -20,9 +20,6 @@ export class ProductCardComponent{
 			store: this.product.store
 		};
 		this.shoppingService.addToCart(cart)
-		  .subscribe(
-		  		data => console.log(data),
-		  		error => console.log(error)
-		  	);
+		  .subscribe();
 	}	
 }

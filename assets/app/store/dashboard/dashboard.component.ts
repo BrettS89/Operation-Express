@@ -10,11 +10,11 @@ import { Store } from '../../consumer/store.model';
 })
 
 export class DashboardComponent implements OnInit{
+	storeName: string;
+	storeCity: string;
 	inRoute;
 	here;
-
 	status: string = 'notHere';
-
 	isInRoute: boolean = true;
 	isHere: boolean;
 
@@ -34,38 +34,16 @@ export class DashboardComponent implements OnInit{
 	}
 
 	ngOnInit(){
-		// setInterval(() =>{
-		//   this.storeService.getStore(localStorage.getItem('storeId'))
-		//     .subscribe((data) => {
-		// 	  	this.store = data;
-		// 	  	let ir = [];
-		// 	  	let ar = [];
-		// 	  	this.inRoute = [];
-		// 	  	this.here = [];
-		// 	  	for(let order of data.orders){
-		// 	  		if(order.completedPurchase == false){
-		// 	  			if(order.hasArrived == false){
-		// 	  				ir.push(order);
-		// 	  				this.inRoute = ir;
-		// 	  			} 
-		// 	  			if(order.hasArrived == true){
-		// 	  				ar.push(order);
-		// 	  				this.here = ar;
-		// 	  			}
-		// 	  		}
-		// 	  	}
-		// 	  }),
-		//   error => console.log(error);
-		// }, 1000);
-
 		setInterval(() => {
 			this.storeService.employeeOrders(localStorage.getItem('userId'))
 			  .subscribe(data => {
+			  	this.storeName = data.storeName;
+			  	this.storeCity = data.storeCity;
 			  	let ir = [];
 			  	let ar = [];
 			  	this.inRoute = [];
 			  	this.here = [];
-			  	for(let order of data){
+			  	for(let order of data.orders){
 			  		if(order.hasArrived == false){
 			  			this.inRoute.push(order);
 			  		}

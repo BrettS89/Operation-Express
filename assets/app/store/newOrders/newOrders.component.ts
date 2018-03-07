@@ -10,6 +10,8 @@ import { Store } from '../../consumer/store.model';
 
 export class NewOrdersComponent implements OnInit{
 	orders;
+	storeName: string;
+	storeCity: string;
 
 	constructor(private storeService: StoreService){}
 
@@ -17,8 +19,10 @@ export class NewOrdersComponent implements OnInit{
 		setInterval(() => {
 			this.storeService.newOrders(localStorage.getItem('storeId'))
 			  .subscribe(data => {
+			  	this.storeName = data.storeName;
+			  	this.storeCity = data.storeCity;
 			  	this.orders = [];
-			  	this.orders = data;
+			  	this.orders = data.orders;
 			  	console.log(this.orders);
 			  },
 			  error => console.log(error)

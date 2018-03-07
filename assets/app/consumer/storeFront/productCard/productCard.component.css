@@ -28,7 +28,6 @@
 
 .click:hover{
 	cursor: pointer;
-	text-decoration: underline;
 }
 
 div{
@@ -62,6 +61,10 @@ img{
 
 .nopad{
 	display: inline;
+}
+
+.basket:active{
+	transform: scale(0.95);
 }
 
 @media(max-width: 991px){

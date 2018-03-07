@@ -251,7 +251,8 @@ router.get('/auth/neworders/:id', async (req, res) => {
 	const orders = await Order.find({store: req.params.id, accepted: false})
 						 .populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}, {path: 'store', select: ['name', 'city']}])
 						 .exec();
-	res.status(200).json(orders);					 
+	const store = await Store.findById(req.params.id);					 
+	res.status(200).json({orders: orders, storeName: store.name, storeCity: store.city});					 
 });
 
 
@@ -298,9 +299,11 @@ router.post('/auth/accept', async (req, res) => {
 router.get('/auth/employeeorders/:id', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
 	const orders = await Order.find({employee: req.params.id, completedPurchase: false})
-						 .populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}, {path: 'store', select: ['name', 'city']}])
+						 .populate([{path: 'user', select: ['._id', 'firstName', 'lastName']}, {path: 'products', model: Product}])
 						 .exec();
-	res.status(200).json(orders);
+	const store = await Store.findOne({employees: req.params.id});
+	console.log(store.name);
+	res.status(200).json({orders: orders, storeName: store.name, storeCity: store.city});
 });
 
 

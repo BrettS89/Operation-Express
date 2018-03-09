@@ -114,6 +114,14 @@ export class ShoppingService{
 	}
 
 
+//Send Stripe token to server
+	sendToken(token: any){
+		return this.http.post('/store/auth/stripe' + this.token, token, {headers: this.headers})
+		  .map((response: Response) => response.json())
+		  .catch((error: Response) => Observable.throw(error.json()));
+	}	
+
+
 //Get order by Id
 	getOrder(id: string){
 		return this.http.get('http://localhost:3000/store/getorder/' + id)

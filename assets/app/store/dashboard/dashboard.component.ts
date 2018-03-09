@@ -9,7 +9,7 @@ import { Store } from '../../consumer/store.model';
 	styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit, OnDestroy{
 	storeName: string;
 	storeCity: string;
 	inRoute;
@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit{
 	status: string = 'notHere';
 	isInRoute: boolean = true;
 	isHere: boolean;
+	get: any;
 
 	constructor(private storeService: StoreService,
 				private shoppingService: ShoppingService){}
@@ -34,7 +35,7 @@ export class DashboardComponent implements OnInit{
 	}
 
 	ngOnInit(){
-		setInterval(() => {
+		this.get = setInterval(() => {
 			this.storeService.employeeOrders(localStorage.getItem('userId'))
 			  .subscribe(data => {
 			  	this.storeName = data.storeName;
@@ -55,6 +56,10 @@ export class DashboardComponent implements OnInit{
 			  });
 		}, 1000)
 
+	}
+
+	ngOnDestroy(){
+		clearInterval(this.get);
 	}
 
 }

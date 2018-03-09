@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StoreService } from '../store.service';
 import { Store } from '../../consumer/store.model';
 
@@ -8,15 +8,16 @@ import { Store } from '../../consumer/store.model';
 	styleUrls: ['./newOrders.component.css']
 })
 
-export class NewOrdersComponent implements OnInit{
+export class NewOrdersComponent implements OnInit, OnDestroy{
 	orders;
 	storeName: string;
 	storeCity: string;
+	get: any;
 
 	constructor(private storeService: StoreService){}
 
 	ngOnInit(){
-		setInterval(() => {
+		this.get = setInterval(() => {
 			this.storeService.newOrders(localStorage.getItem('storeId'))
 			  .subscribe(data => {
 			  	this.storeName = data.storeName;
@@ -28,6 +29,10 @@ export class NewOrdersComponent implements OnInit{
 			  error => console.log(error)
 			  )
 		}, 1000);
+	}
+
+	ngOnDestroy(){
+		clearInterval(this.get);
 	}
 
 }

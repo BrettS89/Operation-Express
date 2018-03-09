@@ -11,6 +11,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const request = require('superagent');
 const keys = require('../classified/keys');
+const stripe = require('stripe')(keys.stripeSecretKey);
 
 
 //Get stores near searched zipcode
@@ -188,6 +189,7 @@ router.get('/auth/getcart/:id', async (req, res) => {
 	const cart = await Cart.findOne({user: req.params.id})
 					   .populate({path: 'items', populate: [{path: 'product', select: ['name', 'brand', 'price', 'quantity', 'image']}]})
 	   				   .exec();
+	if(!cart){return res.status(404).json({message: 'no cart'});}   				   
 	if(cart.user != decoded.user._id){
       		return res.status(401).json({
      		   title: 'Not Authenticated',
@@ -201,7 +203,10 @@ router.get('/auth/getcart/:id', async (req, res) => {
 //Get cart item count
 router.get('/auth/itemcount/:id', async (req, res) => {
 	var decoded = jwt.decode(req.query.token);
-	const itemCount = await Cart.findOne({user: req.params.id})
+	const itemCount = await Cart.findOne({user: req.params.id});
+	if(!itemCount){
+		return;
+	}
 	if(itemCount.user != decoded.user._id){
       		return res.status(401).json({
      		   title: 'Not Authenticated',
@@ -242,6 +247,18 @@ router.post('/auth/placeorder/:id', async (req, res) => {
 				title: 'Order placed',
 				order: order
 			});	  
+});
+
+
+//Charge an order with Stripe
+router.post('/auth/stripe', async (req, res) => {
+	const charge = await stripe.charges.create({
+		amount: req.body.total,
+		currency: 'usd',
+		description: 'order',
+		source: req.body.tok.id
+	});
+	res.status(200).json(charge);
 });
 
 

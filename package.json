@@ -31,9 +31,11 @@
     "jsonwebtoken": "^8.1.1",
     "mongoose": "^5.0.5",
     "morgan": "~1.9.0",
+    "ngx-stripe": "^0.2.3",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.0",
     "serve-favicon": "~2.4.5",
+    "stripe": "^5.5.0",
     "superagent": "^3.8.2",
     "zone.js": "^0.8.20"
   },

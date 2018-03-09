@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { AgmCoreModule } from '@agm/core';
 import { ConsumerModule } from './consumer/consumer.module';
 import { StoreModule} from './store/store.module';
+import { NgxStripeModule } from 'ngx-stripe';
 
 import { ConsumerAuthService } from './auth/consumerAuth/consumerAuth.service';
 import { StoreService } from './store/store.service';
@@ -49,7 +50,8 @@ import { CreateEmployeeComponent } from './auth/storeAuth/createEmployee/createE
 	    ReactiveFormsModule, 
 	    ConsumerModule,
 	    StoreModule,
-        routing
+        routing,
+        NgxStripeModule.forRoot('pk_test_dE23DJ0t5zN16bfMsiyQiWGy')
     ],
     providers: [ConsumerAuthService, StoreService, ShoppingService, StoreAuthService],
     bootstrap: [AppComponent]
